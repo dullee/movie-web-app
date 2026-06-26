@@ -1,22 +1,25 @@
 "use client";
 
 import Image from "next/image";
+import axios from "axios";
 import { useState, useEffect } from "react";
 
 export default function Home() {
-
-  const key: string = "https://api.themoviedb.org/3";
+  const BASE_API: string = "https://api.themoviedb.org/3";
   const [searchInput, setSearchInput] = useState("");
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(()=>{
-    const fetchData = async ()=>{
-    .then
-
-    }
-  },[])
+  useEffect(() => {
+    const fetchData = async () => {
+      const respone = await axios.get(
+        `${BASE_API}/movie/popular?language=en-US&page=1`,
+      );
+      console.log(respone.data);
+    };
+    fetchData();
+  }, []);
 
   const changeSearchInput = (newValue: string) => {
     setSearchInput(newValue);
