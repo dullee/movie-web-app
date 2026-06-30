@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/router";
 import axios from "axios";
 import { useState, useEffect } from "react";
-
+import Header from "./_components/header";
 import Upcoming from "./_components/upcoming";
 import { log } from "node:console";
 
@@ -71,38 +72,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col flex-1 bg-zinc-50 font-sans dark:bg-black relative">
-      <div className="fixed top-0 flex flex-row justify-between w-full px-20 pt-5 pb-9 bg-black z-10">
-        <div>Movie Z</div>
-        <div className="flex flex-row gap-5 relative">
-          <p className="border p-2 cursor-pointer">Genre</p>
-          <input
-            className="border"
-            placeholder="Search.."
-            onChange={(e) => {
-              changeSearchInput(e.target.value);
-            }}
-          />
-          {searchInput ? (
-            <div className="absolute text-white bg-black top-11 right-0 border p-5 z-20 min-w-[200px]">
-              {searchOuput.length === 0 ? (
-                loadingSearchResults ? (
-                  <div>Loading</div>
-                ) : (
-                  <div>No results</div>
-                )
-              ) : (
-                searchOuput.slice(0, 5).map((movie) => (
-                  <div key={movie.id} className="py-1 hover:bg-zinc-800">
-                    {movie.title}
-                  </div>
-                ))
-              )}
-            </div>
-          ) : null}
-        </div>
-
-        <button className="cursor-pointer border">Dark mode</button>
-      </div>
+      <Header></Header>
       <div className="flex flex-row gap-5 pt-25 overflow-x-auto w-full">
         {nowPlayingMovies.map((movie) => (
           <li
