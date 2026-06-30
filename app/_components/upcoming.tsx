@@ -19,9 +19,10 @@ export default function Upcoming({ movies }: UpcomingProps) {
         <button>See more</button>
       </div>
       <div className="grid grid-cols-1  md:grid-cols-5 gap-5">
-        {movies.map((movie) => (
+        {movies.splice(0, 10).map((movie) => (
           <MovieCard
             key={movie.id}
+            id={movie.id}
             title={movie.title}
             image={movie.poster_path}
             rating={movie.vote_average}

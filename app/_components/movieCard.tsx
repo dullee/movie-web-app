@@ -1,17 +1,26 @@
 "use client";
 import { useState } from "react";
+import MovieDetails from "./movieDetails";
 
 const IMAGE_SERVICE_URL = "https://image.tmdb.org/t/p";
 
 interface movieProps {
+  id: number;
   title: string;
   image: string;
   rating: number;
 }
 
-export default function MovieCard({ title, image, rating }: movieProps) {
+export default function MovieCard({ id, title, image, rating }: movieProps) {
+  const [cardClicked, setCardClicked] = useState(false);
+
   return (
-    <div className="flex flex-col bg-[#27272A] rounded-xl cursor-pointer overflow-hidden">
+    <div
+      onClick={() =>
+        setCardClicked(true)
+      }
+      className="flex flex-col bg-[#27272A] rounded-xl cursor-pointer overflow-hidden"
+    >
       <img
         className="w-full object-cover"
         src={`${IMAGE_SERVICE_URL}/w500${image}`}
