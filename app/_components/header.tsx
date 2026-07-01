@@ -1,5 +1,6 @@
 "use client ";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import axios from "axios";
 
 export default function Header() {
@@ -35,8 +36,11 @@ export default function Header() {
     searchMovies();
   };
   return (
-    <div className="fixed top-0 flex flex-row justify-between w-full px-20 pt-5 pb-9 bg-black z-10">
-      <div>Movie Z</div>
+    <div className="fixed top-0 flex flex-row justify-between w-full px-20 pt-5 pb-9 z-10">
+      <Link href="/">
+        <div>Movie Z</div>
+      </Link>
+
       <div className="flex flex-row gap-5 relative">
         <p className="border p-2 cursor-pointer">Genre</p>
         <input
@@ -47,7 +51,7 @@ export default function Header() {
           }}
         />
         {searchInput ? (
-          <div className="absolute text-white bg-black top-11 right-0 border p-5 z-20 min-w-[200px]">
+          <div className="absolute top-11 right-0 border p-5 z-20 min-w-[200px]">
             {searchOuput.length === 0 ? (
               loadingSearchResults ? (
                 <div>Loading</div>
