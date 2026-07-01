@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import axios from "axios";
+import MovieCard from "./movieCard";
 
 export default function Header() {
   const BASE_API: string = "https://api.themoviedb.org/3";
@@ -28,7 +29,7 @@ export default function Header() {
           headers,
         },
       );
-      console.log(res.data);
+      console.log("search outpu", res.data.results);
 
       setSearchOutput(res.data.results);
       setLoadingSearchResults(false);
@@ -51,7 +52,7 @@ export default function Header() {
           }}
         />
         {searchInput ? (
-          <div className="absolute top-11 right-0 border p-5 z-20 min-w-[200px]">
+          <div className="absolute top-11 right-0 border p-5 z-20 min-w-[200px] overflow-scroll">
             {searchOuput.length === 0 ? (
               loadingSearchResults ? (
                 <div>Loading</div>
@@ -59,11 +60,16 @@ export default function Header() {
                 <div>No results</div>
               )
             ) : (
-              searchOuput.slice(0, 5).map((movie) => (
-                <div key={movie.id} className="py-1 hover:bg-zinc-800">
-                  {movie.title}
-                </div>
-              ))
+              searchOuput
+                .slice(0, 5)
+                .map((movie) => (
+                  <MovieCard
+                    id={movie.id}
+                    title={movie.title}
+                    image={movie.poster_path}
+                    rating={movie.vote_average}
+                  />
+                ))
             )}
           </div>
         ) : null}
