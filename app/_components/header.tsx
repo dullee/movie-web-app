@@ -36,7 +36,7 @@ export default function Header() {
     searchMovies();
   };
   return (
-    <div className="fixed top-0 flex flex-row justify-between w-full px-20 pt-5 pb-9 z-10">
+    <div className="fixed top-0 flex flex-row bg-white justify-between w-full px-20 pt-5 pb-9 z-10">
       <Link href="/">
         <div>Movie Z</div>
       </Link>

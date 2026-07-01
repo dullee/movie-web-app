@@ -4,8 +4,10 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import Header from "./header";
 import { PlayIcon, XIcon } from "lucide-react";
+import MovieCard from "./movieCard";
+import Header from "./header";
+import SimilarMovies from "./similarMovies";
 
 interface MovieDetailsProps {
   movieId: number;
@@ -17,6 +19,8 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
     "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OWE3OGQ2OTcwZWQwMjVhM2M4OTJhYWMzMmU5MDIyMyIsIm5iZiI6MTc4MjM1NjE0OC45OTMsInN1YiI6IjZhM2M5OGI0ZmIwMGJlY2M0NDNlNWJkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MIxDzsEjJDNt6C-EpUX1pBSMbTbxjFyggM_M_q4pC04";
   const headers = { Authorization: `Bearer ${API_READ_ACCESS_TOKEN}` };
 
+  const [crew, setCrew] = useState<array | null>(null);
+  const [actors, setActors] = useState<array | null>(null);
 
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [showTrailer, setShowTrailer] = useState(false);
@@ -28,7 +32,7 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const [movieRes, videoRes] = await Promise.all([
+        const [movieRes, videoRes, creditsRes] = await Promise.all([
           axios.get(
             `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`,
             { headers },
@@ -37,13 +41,17 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
             `https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`,
             { headers },
           ),
+          axios.get(
+            `https://api.themoviedb.org/3/movie/${movieId}/credits?language=en-US`,
+            { headers },
+          ),
         ]);
 
-        console.log("vide data", videoRes);
         const officialTrailer = videoRes.data.results.find(
           (video: any) => video.site === "YouTube" && video.type === "Trailer",
         );
-
+        setActors(creditsRes.data.cast);
+        setCrew(creditsRes.data.crew);
         setMovie(movieRes.data);
         setTrailerKey(officialTrailer.key);
       } catch (error) {
@@ -59,6 +67,10 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
       </div>
     );
   }
+
+  const directors = crew?.filter((member) => member.job === "Director");
+  const writers = crew?.filter((member) => member.job === "Writer");
+
   console.log(movie);
 
   return (
@@ -121,6 +133,25 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
           ))}
         </div>
         <p className="w-full">{movie.overview}</p>
+        <div className="flex flex-row w-full gap-2">
+          <h2 className="pr-5 font-bold">Director</h2>
+          {directors.map((director) => (
+            <p key={director.id}>{director.name}</p>
+          ))}
+        </div>
+        <div className="flex flex-row w-full gap-2">
+          <h2 className="pr-5 font-bold">Writers</h2>
+          {writers.map((writer) => (
+            <p key={writer.id}>{writer.name} ·</p>
+          ))}
+        </div>
+        <div className="flex flex-row w-full gap-2">
+          <h2 className="pr-5 font-bold">Stars</h2>
+          {actors.slice(0, 10).map((actor) => (
+            <p key={actor.id}>{actor.name} ·</p>
+          ))}
+        </div>
+        <SimilarMovies movieId={movieId} />
       </div>
     </div>
   );
