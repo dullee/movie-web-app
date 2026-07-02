@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function SearchBar({}) {
   const [searchInput, setSearchInput] = useState("");
-  const [searchOuput, setSearchOutput] = useState([]);
+  const [searchOuput, setSearchOutput] = useState<any[] | null>([]);
   const [loadingSearchResults, setLoadingSearchResults] = useState(false);
 
   const BASE_API: string = "https://api.themoviedb.org/3";
@@ -49,14 +49,14 @@ export default function SearchBar({}) {
       />
       {searchInput ? (
         <div className="absolute top-11 -translate-x-1/2 bg-white w-[577px] border p-5 z-20 min-w-[200px] overflow-scroll gap-5">
-          {searchOuput.length === 0 ? (
+          {searchOuput?.length === 0 ? (
             loadingSearchResults ? (
               <div>Loading</div>
             ) : (
               <div>No results</div>
             )
           ) : (
-            searchOuput.slice(0, 5).map((movie) => (
+            searchOuput?.slice(0, 5).map((movie) => (
               <div key={movie.id} className="flex flex-row">
                 <Image
                   height={300}

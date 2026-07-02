@@ -73,7 +73,7 @@ export default function Home() {
     <div className="flex flex-col flex-1 bg-zinc-50  dark:bg-black relative">
       <Header></Header>
       <div className="flex flex-row gap-5 pt-25 overflow-x-auto w-full">
-        {nowPlayingMovies.map((movie) => (
+        {nowPlayingMovies?.map((movie) => (
           <li
             key={movie.id}
             className="list-none shrink-0 w-screen text-white max-h-[600px] flex flex-col gap-2 relative"
