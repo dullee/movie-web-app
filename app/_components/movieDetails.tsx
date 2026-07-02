@@ -72,11 +72,11 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
     return <MovieDetailsSkeleton />;
   }
 
-  const getRating = (forAdult) => {
+  const getRating = (forAdult: boolean) => {
     return forAdult ? "R" : "PG";
   };
 
-  const getMovieLength = (length) => {
+  const getMovieLength = (length: number) => {
     const hours = Math.round(length / 60);
     const minutes = Math.round(length % (length / 60));
     return `${hours}h ${minutes}m`;
