@@ -2,40 +2,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import axios from "axios";
-import MovieCard from "./movieCard";
+import SearchBar from "./searchBar";
 
 export default function Header() {
-  const BASE_API: string = "https://api.themoviedb.org/3";
-  const API_READ_ACCESS_TOKEN: string =
-    "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OWE3OGQ2OTcwZWQwMjVhM2M4OTJhYWMzMmU5MDIyMyIsIm5iZiI6MTc4MjM1NjE0OC45OTMsInN1YiI6IjZhM2M5OGI0ZmIwMGJlY2M0NDNlNWJkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MIxDzsEjJDNt6C-EpUX1pBSMbTbxjFyggM_M_q4pC04";
-  const headers = { Authorization: `Bearer ${API_READ_ACCESS_TOKEN}` };
-
-  const [searchInput, setSearchInput] = useState("");
-  const [searchOuput, setSearchOutput] = useState([]);
-  const [loadingSearchResults, setLoadingSearchResults] = useState(false);
-
-  const changeSearchInput = (newValue: string) => {
-    setSearchInput(newValue);
-    setLoadingSearchResults(true);
-    const searchMovies = async () => {
-      if (!newValue) {
-        setSearchOutput([]);
-        setLoadingSearchResults(false);
-        return;
-      }
-      const res = await axios.get(
-        `${BASE_API}/search/movie?query=${newValue}&language=en-US&page=1`,
-        {
-          headers,
-        },
-      );
-      console.log("search outpu", res.data.results);
-
-      setSearchOutput(res.data.results);
-      setLoadingSearchResults(false);
-    };
-    searchMovies();
-  };
   return (
     <div className="fixed top-0 flex flex-row bg-white justify-between w-full px-20 pt-5 pb-9 z-10">
       <Link href="/">
@@ -44,35 +13,7 @@ export default function Header() {
 
       <div className="flex flex-row gap-5 relative">
         <p className="border p-2 cursor-pointer">Genre</p>
-        <input
-          className="border"
-          placeholder="Search.."
-          onChange={(e) => {
-            changeSearchInput(e.target.value);
-          }}
-        />
-        {searchInput ? (
-          <div className="absolute top-11 right-0 border p-5 z-20 min-w-[200px] overflow-scroll">
-            {searchOuput.length === 0 ? (
-              loadingSearchResults ? (
-                <div>Loading</div>
-              ) : (
-                <div>No results</div>
-              )
-            ) : (
-              searchOuput
-                .slice(0, 5)
-                .map((movie) => (
-                  <MovieCard
-                    id={movie.id}
-                    title={movie.title}
-                    image={movie.poster_path}
-                    rating={movie.vote_average}
-                  />
-                ))
-            )}
-          </div>
-        ) : null}
+        <SearchBar />
       </div>
 
       <button className="cursor-pointer border">Dark mode</button>

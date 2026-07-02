@@ -71,13 +71,13 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col flex-1 bg-zinc-50 font-sans dark:bg-black relative">
+    <div className="flex flex-col flex-1 bg-zinc-50  dark:bg-black relative">
       <Header></Header>
       <div className="flex flex-row gap-5 pt-25 overflow-x-auto w-full">
         {nowPlayingMovies.map((movie) => (
           <li
             key={movie.id}
-            className="list-none shrink-0 w-screen max-h-[600px] flex flex-col gap-2 relative"
+            className="list-none shrink-0 w-screen text-white max-h-[600px] flex flex-col gap-2 relative"
           >
             <img
               className="h-[600px] object-cover"
@@ -92,7 +92,7 @@ export default function Home() {
                 <p className="text-[#71717A]">/10</p>
               </div>
               <p className="max-w-4/5 text-xs py-4">{movie.overview}</p>
-              <button className="rounded-md px-4 py-3 bg-[#F4F4F5] text-black cursor-pointer">
+              <button className="rounded-md text-black px-4 py-3 bg-[#F4F4F5] cursor-pointer">
                 {" "}
                 Watch Trailer
               </button>

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PlayIcon, XIcon } from "lucide-react";
+import MovieDetailsSkeleton from "./movieDetailsSkeleton";
 import MovieCard from "./movieCard";
 import Header from "./header";
 import SimilarMovies from "./similarMovies";
@@ -19,7 +20,7 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
     "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OWE3OGQ2OTcwZWQwMjVhM2M4OTJhYWMzMmU5MDIyMyIsIm5iZiI6MTc4MjM1NjE0OC45OTMsInN1YiI6IjZhM2M5OGI0ZmIwMGJlY2M0NDNlNWJkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MIxDzsEjJDNt6C-EpUX1pBSMbTbxjFyggM_M_q4pC04";
   const headers = { Authorization: `Bearer ${API_READ_ACCESS_TOKEN}` };
 
-  const [crew, setCrew] = useState<array | null>(null);
+  const [crew, setCrew] = useState<any | null>(null);
   const [actors, setActors] = useState<array | null>(null);
 
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
@@ -60,21 +61,20 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
     };
     fetchMovie();
   }, [movieId]);
+
   if (!movie) {
-    return (
-      <div className="flex h-screen items-center justify-center ">
-        <p className="text-xl animate-pulse">Loading movie details...</p>
-      </div>
-    );
+    return <MovieDetailsSkeleton />;
   }
 
   const directors = crew?.filter((member) => member.job === "Director");
-  const writers = crew?.filter((member) => member.job === "Writer");
+  const writers = crew?.filter((member) => member.known_for_department === "Writing");
 
-  console.log(movie);
+  console.log("crew",crew);
+
+  console.log("writers", writers);
 
   return (
-    <div className="flex flex-1 relative">
+    <div className="flex p-20 w-full max-w-6xl mx-auto justify-center items-center">
       {showTrailer && trailerKey ? (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
           <div className="relative w-full max-w-4xl aspect-video bg-zinc-900 rounded-xl overflow-hidden shadow-2xl">
@@ -141,13 +141,13 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
         </div>
         <div className="flex flex-row w-full gap-2">
           <h2 className="pr-5 font-bold">Writers</h2>
-          {writers.map((writer) => (
-            <p key={writer.id}>{writer.name} ·</p>
+          {writers.slice(0,3).map((writer) => (
+            <p key={writer.credit_id}>{writer.name} ·</p>
           ))}
         </div>
         <div className="flex flex-row w-full gap-2">
           <h2 className="pr-5 font-bold">Stars</h2>
-          {actors.slice(0, 10).map((actor) => (
+          {actors.slice(0, 3).map((actor) => (
             <p key={actor.id}>{actor.name} ·</p>
           ))}
         </div>
