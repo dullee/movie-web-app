@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PlayIcon, XIcon } from "lucide-react";
 import MovieDetailsSkeleton from "./movieDetailsSkeleton";
+import Footer from "./footer";
 import Header from "./header";
 import SimilarMovies from "./similarMovies";
 
@@ -105,9 +106,7 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
           </div>
         </div>
       ) : null}
-
       <Header />
-
       <div className="flex p-20 pt-25 flex-col w-full max-w-6xl mx-auto justify-center items-center gap-8">
         <div className="flex justify-between w-full items-end   pb-4">
           <div className="flex flex-col gap-1 text-black">
@@ -210,11 +209,11 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
           </div>
         </div>
 
-        {/* Similar recommendations section layout row */}
         <div className="w-full text-black">
           <SimilarMovies movieId={movieId} />
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

@@ -1,12 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/router";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import Footer from "./_components/footer";
 import Header from "./_components/header";
 import Upcoming from "./_components/upcoming";
-import { log } from "node:console";
 
 export default function Home() {
   const BASE_API: string = "https://api.themoviedb.org/3";
@@ -20,7 +19,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
 
-  const [popularMovies, setPopularMovies] = useState([]);
+  const [popularMovies, setPopularMovies] = useState<any[]>(null);
   const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
 
@@ -38,9 +37,9 @@ export default function Home() {
           headers,
         }),
       ]);
-      setNowPlayingMovies(nowPlayingRes.data.results);
-      setUpcomingMovies(upcomingRes.data.results);
-      setPopularMovies(popularRes.data.results);
+      setNowPlayingMovies(nowPlayingRes.data.results || []);
+      setUpcomingMovies(upcomingRes.data.results || []);
+      setPopularMovies(popularRes.data.results || []);
       setLoading(false);
     };
 
@@ -79,7 +78,10 @@ export default function Home() {
             key={movie.id}
             className="list-none shrink-0 w-screen text-white max-h-[600px] flex flex-col gap-2 relative"
           >
-            <img
+            <Image
+              alt={movie.title}
+              width={1000}
+              height={600}
               className="h-[600px] object-cover"
               src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
             />
@@ -104,13 +106,7 @@ export default function Home() {
         <Upcoming movies={upcomingMovies} />
         <Upcoming movies={upcomingMovies} />
       </div>
-      <div className="flex flex-row justify-between p-20 bg-[#4338CA] mt-13">
-        <div>Movie Z</div>
-        <div>
-          <div>Contact information</div>
-          <div>Follow us</div>
-        </div>
-      </div>
+      <Footer />
     </div>
   );
 }
