@@ -19,9 +19,9 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
 
-  const [popularMovies, setPopularMovies] = useState<any[]>(null);
-  const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
-  const [upcomingMovies, setUpcomingMovies] = useState([]);
+  const [popularMovies, setPopularMovies] = useState<any[] | null>(null);
+  const [nowPlayingMovies, setNowPlayingMovies] = useState<any[] | null>(null);
+  const [upcomingMovies, setUpcomingMovies] = useState<any[] | null>(null);
 
   useEffect(() => {
     const fetchMovies = async () => {
