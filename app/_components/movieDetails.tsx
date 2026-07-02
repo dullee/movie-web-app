@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PlayIcon, XIcon } from "lucide-react";
 import MovieDetailsSkeleton from "./movieDetailsSkeleton";
-import MovieCard from "./movieCard";
 import Header from "./header";
 import SimilarMovies from "./similarMovies";
 
@@ -20,8 +19,9 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
     "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OWE3OGQ2OTcwZWQwMjVhM2M4OTJhYWMzMmU5MDIyMyIsIm5iZiI6MTc4MjM1NjE0OC45OTMsInN1YiI6IjZhM2M5OGI0ZmIwMGJlY2M0NDNlNWJkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MIxDzsEjJDNt6C-EpUX1pBSMbTbxjFyggM_M_q4pC04";
   const headers = { Authorization: `Bearer ${API_READ_ACCESS_TOKEN}` };
 
-  const [crew, setCrew] = useState<any | null>(null);
-  const [actors, setActors] = useState<array | null>(null);
+  // 🚀 TypeScript Fix: Changed 'array' to 'any[]'
+  const [crew, setCrew] = useState<any[] | null>(null);
+  const [actors, setActors] = useState<any[] | null>(null);
 
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [showTrailer, setShowTrailer] = useState(false);
@@ -54,7 +54,12 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
         setActors(creditsRes.data.cast);
         setCrew(creditsRes.data.crew);
         setMovie(movieRes.data);
-        setTrailerKey(officialTrailer.key);
+        // 🚀 Safeguard: optional chaining fallback if no official trailer key exists
+        setTrailerKey(
+          officialTrailer
+            ? officialTrailer.key
+            : videoRes.data.results[0]?.key || null,
+        );
       } catch (error) {
         console.error("failed to fetch movie data", error);
       }
@@ -66,18 +71,25 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
     return <MovieDetailsSkeleton />;
   }
 
-  const directors = crew?.filter((member) => member.job === "Director");
-  const writers = crew?.filter((member) => member.known_for_department === "Writing");
+  const getRating = (forAdult) => {
+    return forAdult ? "R" : "PG";
+  };
 
-  console.log("crew",crew);
+  const getMovieLength = (length) => {
+    const hours = Math.round(length / 60);
+    const minutes = Math.round(length % (length / 60));
+    return `${hours}h ${minutes}m`;
+  };
 
-  console.log("writers", writers);
+  const directors = crew?.filter((member) => member.job === "Director") || [];
+  const writers =
+    crew?.filter((member) => member.known_for_department === "Writing") || [];
 
   return (
-    <div className="flex p-20 w-full max-w-6xl mx-auto justify-center items-center">
+    <div className="flex flex-col min-h-screen relative">
       {showTrailer && trailerKey ? (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="relative w-full max-w-4xl aspect-video bg-zinc-900 rounded-xl overflow-hidden shadow-2xl">
+        <div className="fixed inset-0  flex items-center justify-center z-50 p-4">
+          <div className="relative w-full max-w-4xl aspect-video  rounded-xl overflow-hidden shadow-2xl">
             <button
               onClick={() => setShowTrailer(false)}
               className="absolute top-4 right-4 bg-black/60 p-2 rounded-full hover:bg-black/80 transition text-white z-10"
@@ -93,65 +105,115 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
           </div>
         </div>
       ) : null}
+
       <Header />
-      <div className="flex p-20 pt-25 flex-col w-full justify-center items-center">
-        <div className="flex justify-between w-full">
-          <div className="flex flex-col">
-            <h1 className="text-3xl">{movie.title}</h1>
-            <p>{movie.release_date}</p>
+
+      <div className="flex p-20 pt-25 flex-col w-full max-w-6xl mx-auto justify-center items-center gap-8">
+        <div className="flex justify-between w-full items-end   pb-4">
+          <div className="flex flex-col gap-1 text-black">
+            <h1 className="text-4xl  font-extrabold tracking-tight">
+              {movie.title}
+            </h1>
+            <p className=" text-sm">
+              {movie.release_date.replaceAll("-", ".")} ·{" "}
+              {getRating(movie.adult)} · {getMovieLength(movie.runtime)}
+            </p>
           </div>
-          <div className="flex flex-col">
-            <p>Rating</p>
-            <p>{movie.vote_average}</p>
+          <div className="flex flex-col text-black items-end">
+            <p className="text-xs  uppercase font-semibold">Rating</p>
+            <p className="text-2xl font-bold text-yellow-500">
+              {Math.round(movie.vote_average * 10) / 10}
+              <span className="text-sm text-zinc-500">/10</span>
+            </p>
+            <p>{movie.vote_count}</p>
           </div>
         </div>
 
-        <div className="flex gap-10 w-full">
+        <div className="flex gap-10 w-full items-start">
           <img
-            src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`}
-            className="w-auto h-[428px] object-cover"
+            src={`https://image.tmdb.org/t/p/w300/${movie.poster_path}`}
+            className="w-[280px] h-[428px] rounded-xl object-cover shadow-lg border  shrink-0"
+            alt=""
           />
-          <div className="relative">
+          <div className="relative flex-1 group rounded-xl overflow-hidden border  h-[428px]">
             <Button
               variant="outline"
               size="icon"
               onClick={() => playTrailer()}
-              className="absolute bottom-5 left-5 rounded-full"
+              className="absolute bottom-5 left-5 rounded-full z-10 bg-white text-black hover:bg-zinc-200"
+              disabled={!trailerKey}
             >
-              <PlayIcon />
+              <PlayIcon className="fill-black" />
             </Button>
 
             <img
-              src={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
-              className="w-full h-[428px] object-cover cursor-pointer"
+              src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 cursor-pointer"
+              alt=""
             />
           </div>
         </div>
-        <div className="flex w-full flex-wrap justify-center gap-2">
-          {movie.genres.map((genre) => (
-            <Badge key={genre.id}>{genre.name}</Badge>
+
+        {/* Badges Array */}
+        <div className="flex w-full flex-wrap gap-2 justify-start">
+          {movie.genres?.map((genre: any) => (
+            <Badge key={genre.id} variant="secondary" className="px-3 py-1  ">
+              {genre.name}
+            </Badge>
           ))}
         </div>
-        <p className="w-full">{movie.overview}</p>
-        <div className="flex flex-row w-full gap-2">
-          <h2 className="pr-5 font-bold">Director</h2>
-          {directors.map((director) => (
-            <p key={director.id}>{director.name}</p>
-          ))}
+
+        {/* Text Details & Credits Column */}
+        <div className="w-full text-black leading-relaxed text-sm max-w-3xl mr-auto space-y-6">
+          <div>
+            <h3 className="text-lg font-bold  mb-2">Overview</h3>
+            <p>{movie.overview}</p>
+          </div>
+
+          {/* Credits Block Meta layout alignment */}
+          <div className="space-y-3  pt-6">
+            <div className="flex items-center border-b gap-2">
+              <h2 className="w-20 font-bold  shrink-0">Director</h2>
+              <div className="flex flex-wrap gap-2 ">
+                {directors.map((director) => (
+                  <span key={director.id}>{director.name}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center border-b gap-2">
+              <h2 className="w-20 font-bold  shrink-0">Writers</h2>
+              <div className="flex flex-wrap gap-1 ">
+                {writers.slice(0, 3).map((writer, index) => (
+                  <span key={writer.credit_id}>
+                    {writer.name}
+                    {index < Math.min(writers.slice(0, 3).length, 3) - 1
+                      ? " · "
+                      : ""}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center border-b gap-2">
+              <h2 className="w-20 font-bold  shrink-0">Stars</h2>
+              <div className="flex flex-wrap gap-1 ">
+                {actors &&
+                  actors.slice(0, 3).map((actor, index) => (
+                    <span key={actor.id}>
+                      {actor.name}
+                      {index < 2 ? " · " : ""}
+                    </span>
+                  ))}
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-row w-full gap-2">
-          <h2 className="pr-5 font-bold">Writers</h2>
-          {writers.slice(0,3).map((writer) => (
-            <p key={writer.credit_id}>{writer.name} ·</p>
-          ))}
+
+        {/* Similar recommendations section layout row */}
+        <div className="w-full text-black">
+          <SimilarMovies movieId={movieId} />
         </div>
-        <div className="flex flex-row w-full gap-2">
-          <h2 className="pr-5 font-bold">Stars</h2>
-          {actors.slice(0, 3).map((actor) => (
-            <p key={actor.id}>{actor.name} ·</p>
-          ))}
-        </div>
-        <SimilarMovies movieId={movieId} />
       </div>
     </div>
   );
