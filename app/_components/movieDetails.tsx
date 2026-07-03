@@ -9,6 +9,7 @@ import MovieDetailsSkeleton from "./movieDetailsSkeleton";
 import Footer from "./footer";
 import Header from "./header";
 import SimilarMovies from "./similarMovies";
+import Image from "next/image";
 
 interface MovieDetailsProps {
   movieId: number;
@@ -129,10 +130,12 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
         </div>
 
         <div className="flex gap-10 w-full items-start">
-          <img
-            src={`https://image.tmdb.org/t/p/w300/${movie.poster_path}`}
-            className="w-[280px] h-[428px] rounded-xl object-cover shadow-lg border  shrink-0"
-            alt=""
+          <Image
+            width={290}
+            height={428}
+            src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+            className="rounded-xl object-cover shadow-lg border  shrink-0"
+            alt={movie.title}
           />
           <div className="relative flex-1 group rounded-xl overflow-hidden border  h-[428px]">
             <Button
@@ -145,10 +148,12 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
               <PlayIcon className="fill-black" />
             </Button>
 
-            <img
+            <Image
+                width={760}
+                height={428}
               src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 cursor-pointer"
-              alt=""
+              alt={movie.title}
             />
           </div>
         </div>
