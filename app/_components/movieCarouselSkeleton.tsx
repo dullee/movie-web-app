@@ -8,6 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function MovieCarouselSkeleton() {
   return (
@@ -16,7 +17,9 @@ export default function MovieCarouselSkeleton() {
         {Array.from({ length: 3 }).map((_, index) => (
           <CarouselItem key={index} className="flex justify-center  ">
             <Card className="flex justify-center p-0 rounded-none w-[1440px] h-[600px] bg-[#F4F4F5]">
-              <CardContent className="flex items-center max-w-[1440px] relative justify-center p-0"></CardContent>
+              <CardContent className="flex items-center max-w-[1440px] relative justify-center p-0">
+                <Skeleton className="h-full w-full" />
+              </CardContent>
             </Card>
           </CarouselItem>
         ))}

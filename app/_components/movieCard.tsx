@@ -18,7 +18,7 @@ export default function MovieCard({
 
   return (
     <Link href={`/movie/${movie.id}`}>
-      <Card className="flex flex-col bg-[#F4F4F5] rounded-xl cursor-pointer overflow-hidden">
+      <Card className="flex flex-col max-w-[230px] bg-[#F4F4F5] rounded-xl cursor-pointer overflow-hidden">
         <img
           className="w-full object-cover"
           src={`${IMAGE_SERVICE_URL}/w500${movie.poster_path}`}

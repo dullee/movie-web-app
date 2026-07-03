@@ -41,12 +41,12 @@ export default function Home() {
         ]);
 
         setNowPlayingMovies(nowPlayingRes.data.results || []);
-        // setUpcomingMovies(upcomingRes.data.results || []);
+        setUpcomingMovies(upcomingRes.data.results || []);
         setPopularMovies(popularRes.data.results || []);
       } catch (error) {
         console.error("Failed to load home page sections", error);
       } finally {
-        setLoading(false);
+        // setLoading(false);
       }
     };
 

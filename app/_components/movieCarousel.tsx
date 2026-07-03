@@ -12,7 +12,7 @@ import {
 
 export default function MovieCarousel({ movies }: { movies: any[] }) {
   return (
-    <Carousel className="w-full relative flex h-[600xp pt-25 bg-white">
+    <Carousel className="w-full relative flex h-[600xp] pt-25 bg-white">
       <CarouselContent className="">
         {movies?.map((movie) => (
           <CarouselItem key={movie.id} className="flex justify-center ">
