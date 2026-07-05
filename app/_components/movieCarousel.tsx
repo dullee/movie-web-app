@@ -24,6 +24,7 @@ export default function MovieCarousel({ movies }: { movies: any[] }) {
                   alt={movie.title}
                   width={1440}
                   height={600}
+                  loading="eager"
                   className="h-[600px] object-cover"
                   src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
                 />

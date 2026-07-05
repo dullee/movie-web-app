@@ -16,16 +16,17 @@ interface MovieDetailsProps {
 }
 
 export default function MovieDetails({ movieId }: MovieDetailsProps) {
-  const [movie, setMovie] = useState<any>(null);
+  const [movie, setMovie] = useState<any>();
+  const [loading, setLoading] = useState(true);
   const API_READ_ACCESS_TOKEN: string =
     "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OWE3OGQ2OTcwZWQwMjVhM2M4OTJhYWMzMmU5MDIyMyIsIm5iZiI6MTc4MjM1NjE0OC45OTMsInN1YiI6IjZhM2M5OGI0ZmIwMGJlY2M0NDNlNWJkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MIxDzsEjJDNt6C-EpUX1pBSMbTbxjFyggM_M_q4pC04";
   const headers = { Authorization: `Bearer ${API_READ_ACCESS_TOKEN}` };
 
   // 🚀 TypeScript Fix: Changed 'array' to 'any[]'
-  const [crew, setCrew] = useState<any[] | null>(null);
-  const [actors, setActors] = useState<any[] | null>(null);
+  const [crew, setCrew] = useState<any[]>([]);
+  const [actors, setActors] = useState<any[]>([]);
 
-  const [trailerKey, setTrailerKey] = useState<string | null>(null);
+  const [trailerKey, setTrailerKey] = useState<string>("null");
   const [showTrailer, setShowTrailer] = useState(false);
 
   const playTrailer = () => {
@@ -64,12 +65,14 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
         );
       } catch (error) {
         console.error("failed to fetch movie data", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchMovie();
   }, [movieId]);
 
-  if (!movie) {
+  if (loading || !movie) {
     return <MovieDetailsSkeleton />;
   }
 
@@ -149,8 +152,8 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
             </Button>
 
             <Image
-                width={760}
-                height={428}
+              width={760}
+              height={428}
               src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 cursor-pointer"
               alt={movie.title}
