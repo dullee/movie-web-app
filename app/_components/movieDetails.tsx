@@ -4,12 +4,13 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PlayIcon, XIcon } from "lucide-react";
+import { PlayIcon } from "lucide-react";
 import MovieDetailsSkeleton from "./movieDetailsSkeleton";
 import Footer from "./footer";
 import Header from "./header";
 import SimilarMovies from "./similarMovies";
 import Image from "next/image";
+import MovieTrailerPlayer from "./movieTrailerPlayer";
 
 interface MovieDetailsProps {
   movieId: number;
@@ -22,27 +23,17 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
     "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OWE3OGQ2OTcwZWQwMjVhM2M4OTJhYWMzMmU5MDIyMyIsIm5iZiI6MTc4MjM1NjE0OC45OTMsInN1YiI6IjZhM2M5OGI0ZmIwMGJlY2M0NDNlNWJkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MIxDzsEjJDNt6C-EpUX1pBSMbTbxjFyggM_M_q4pC04";
   const headers = { Authorization: `Bearer ${API_READ_ACCESS_TOKEN}` };
 
-  // 🚀 TypeScript Fix: Changed 'array' to 'any[]'
   const [crew, setCrew] = useState<any[]>([]);
   const [actors, setActors] = useState<any[]>([]);
 
-  const [trailerKey, setTrailerKey] = useState<string>("null");
   const [showTrailer, setShowTrailer] = useState(false);
-
-  const playTrailer = () => {
-    if (trailerKey) setShowTrailer(!showTrailer);
-  };
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const [movieRes, videoRes, creditsRes] = await Promise.all([
+        const [movieRes, creditsRes] = await Promise.all([
           axios.get(
             `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`,
-            { headers },
-          ),
-          axios.get(
-            `https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`,
             { headers },
           ),
           axios.get(
@@ -51,18 +42,9 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
           ),
         ]);
 
-        const officialTrailer = videoRes.data.results.find(
-          (video: any) => video.site === "YouTube" && video.type === "Trailer",
-        );
         setActors(creditsRes.data.cast);
         setCrew(creditsRes.data.crew);
         setMovie(movieRes.data);
-        // 🚀 Safeguard: optional chaining fallback if no official trailer key exists
-        setTrailerKey(
-          officialTrailer
-            ? officialTrailer.key
-            : videoRes.data.results[0]?.key || null,
-        );
       } catch (error) {
         console.error("failed to fetch movie data", error);
       } finally {
@@ -90,26 +72,16 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
   const writers =
     crew?.filter((member) => member.known_for_department === "Writing") || [];
 
+  const closeTrailer = () => {
+    setShowTrailer(false);
+  };
+
   return (
     <div className="flex flex-col min-h-screen relative">
-      {showTrailer && trailerKey ? (
-        <div className="fixed inset-0  flex items-center justify-center z-50 p-4">
-          <div className="relative w-full max-w-4xl aspect-video  rounded-xl overflow-hidden shadow-2xl">
-            <button
-              onClick={() => setShowTrailer(false)}
-              className="absolute top-4 right-4 bg-black/60 p-2 rounded-full hover:bg-black/80 transition text-white z-10"
-            >
-              <XIcon />
-            </button>
-            <iframe
-              className="w-full h-full"
-              src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        </div>
-      ) : null}
+      {showTrailer && (
+        <MovieTrailerPlayer movieId={movie.id} onClose={closeTrailer} />
+      )}
+
       <Header />
       <div className="flex p-20 pt-25 flex-col w-full max-w-6xl mx-auto justify-center items-center gap-8">
         <div className="flex justify-between w-full items-end   pb-4">
@@ -144,9 +116,9 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
             <Button
               variant="outline"
               size="icon"
-              onClick={() => playTrailer()}
+              onClick={() => setShowTrailer(!showTrailer)}
+              disabled={showTrailer}
               className="absolute bottom-5 left-5 rounded-full z-10 bg-white text-black hover:bg-zinc-200"
-              disabled={!trailerKey}
             >
               <PlayIcon className="fill-black" />
             </Button>
@@ -161,7 +133,6 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
           </div>
         </div>
 
-        {/* Badges Array */}
         <div className="flex w-full flex-wrap gap-2 justify-start">
           {movie.genres?.map((genre: any) => (
             <Badge key={genre.id} variant="secondary" className="px-3 py-1  ">
@@ -170,14 +141,12 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
           ))}
         </div>
 
-        {/* Text Details & Credits Column */}
         <div className="w-full text-black leading-relaxed text-sm max-w-3xl mr-auto space-y-6">
           <div>
             <h3 className="text-lg font-bold  mb-2">Overview</h3>
             <p>{movie.overview}</p>
           </div>
 
-          {/* Credits Block Meta layout alignment */}
           <div className="space-y-3  pt-6">
             <div className="flex items-center border-b gap-2">
               <h2 className="w-20 font-bold  shrink-0">Director</h2>

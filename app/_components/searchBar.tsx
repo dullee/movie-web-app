@@ -24,7 +24,6 @@ export default function SearchBar({}) {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && searchInput.trim()) {
-      // Force the browser to navigate to the path just like clicking the bottom link
       window.location.href = `/search/${encodeURIComponent(searchInput.trim())}`;
     }
   };
