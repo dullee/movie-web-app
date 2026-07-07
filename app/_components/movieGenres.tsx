@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const AVAILABLE_GENRES = [
   "Action",
@@ -24,14 +26,46 @@ const AVAILABLE_GENRES = [
 export default function MovieGenres({
   toggleGenre,
 }: {
-  toggleGenre: (genreName: string) => void;
+  toggleGenre: (genre: { id: number; name: string }) => void;
 }) {
+  const BASE_API: string = "https://api.themoviedb.org/3";
+  const API_READ_ACCESS_TOKEN: string =
+    "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OWE3OGQ2OTcwZWQwMjVhM2M4OTJhYWMzMmU5MDIyMyIsIm5iZiI6MTc4MjM1NjE0OC45OTMsInN1YiI6IjZhM2M5OGI0ZmIwMGJlY2M0NDNlNWJkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MIxDzsEjJDNt6C-EpUX1pBSMbTbxjFyggM_M_q4pC04";
+  const headers = { Authorization: `Bearer ${API_READ_ACCESS_TOKEN}` };
+
+  const [genreIds, setGenreIds] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const genreIdRes = await axios.get(
+          `${BASE_API}/genre/movie/list?language=en`,
+          { headers },
+        );
+
+        setGenreIds(genreIdRes.data.genres);
+      } catch (error) {
+        console.error("Failed fetching upcoming view:", error);
+      } finally {
+      }
+    };
+    fetchMovies();
+  }, []);
+
+  const sendGenre = (genreName: string) => {
+    const genre = genreIds.find(
+      (g) => g.name.toLowerCase() === genreName.toLowerCase(),
+    );
+    if (!genre) return;
+    toggleGenre(genre);
+  };
+
   return AVAILABLE_GENRES.map((genre) => (
     <Button
       key={genre}
       variant="outline"
       className="rounded-full"
-      onClick={() => toggleGenre(genre)}
+      onClick={() => sendGenre(genre)}
     >
       {genre === "Science Fiction" ? "Sci-Fi" : genre}
     </Button>

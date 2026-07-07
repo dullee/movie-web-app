@@ -1,25 +1,21 @@
-"use client ";
+"use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import SearchBar from "./searchBar";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 import MovieGenres from "./movieGenres";
 
 export default function Header() {
   const [genreIds, setGenreId] = useState<any[]>([]);
-  const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
+  const [selectedGenreId, setSelectedGenreId] = useState<number>(0);
   const [showGenreList, setShowGenreList] = useState(false);
-
-  const toggleGenre = (genreName: string) => {
-    const genre = genreIds.find(
-      (g) => g.name.toLowerCase() === genreName.toLowerCase(),
-    );
-    if (!genre) return;
-
-    setSelectedGenreIds((prev) =>
-      prev.includes(genre.id)
-        ? prev.filter((id) => id !== genre.id)
-        : [...prev, genre.id],
+  const router = useRouter();
+  const toggleGenre = (genre: { id: number; name: string }) => {
+    setShowGenreList(false);
+    router.push(
+      `/search?genreId=${genre.id}&genreName=${encodeURIComponent(genre.name)}`,
     );
   };
 
@@ -32,8 +28,17 @@ export default function Header() {
       </Link>
 
       <div className="flex flex-row gap-5 relative">
-        <MovieGenres toggleGenre={toggleGenre} />
-        <Button onClick={() => setShowGenreList(true)} variant="outline">
+        {showGenreList && (
+          <Card className="absolute top-10">
+            <div>
+              <MovieGenres toggleGenre={toggleGenre} />
+            </div>
+          </Card>
+        )}
+        <Button
+          onClick={() => setShowGenreList(!showGenreList)}
+          variant="outline"
+        >
           Genre
         </Button>
         <SearchBar />

@@ -24,7 +24,7 @@ export default function SearchBar({}) {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && searchInput.trim()) {
-      window.location.href = `/search/${encodeURIComponent(searchInput.trim())}`;
+      window.location.href = `/search?query=${encodeURIComponent(searchInput.trim())}`;
     }
   };
 
@@ -93,7 +93,9 @@ export default function SearchBar({}) {
                     </div>
                   ))}
 
-                  <Link href={`/search/${searchInput}`}>
+                  <Link
+                    href={`/search?query=${encodeURIComponent(searchInput)}`}
+                  >
                     See more "{searchInput}"
                   </Link>
                 </>
