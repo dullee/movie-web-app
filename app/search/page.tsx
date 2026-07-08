@@ -8,6 +8,16 @@ import Footer from "@/app/_components/footer";
 import MovieCard from "@/app/_components/movieCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import MovieGenres from "@/app/_components/movieGenres";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import MoviePagination from "../_components/pagination";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -17,11 +27,11 @@ export default function Page() {
   const searchInput = searchParams.get("query") || "";
   const urlGenreId = searchParams.get("genreId") || "";
   const urlGenreName = searchParams.get("genreName") || "";
+  const currentPage = Number(searchParams.get("page") || 1);
 
   const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
   const [movies, setMovies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   const API_READ_ACCESS_TOKEN: string =
@@ -43,16 +53,18 @@ export default function Page() {
         let movieApiUrl = "";
 
         if (urlGenreId && !searchInput) {
-          movieApiUrl = `https://api.themoviedb.org/3/discover/movie?language=en-US&with_genres=${urlGenreId}&page=${page}`;
+          movieApiUrl = `https://api.themoviedb.org/3/discover/movie?language=en-US&with_genres=${urlGenreId}&page=${currentPage}`;
         } else if (searchInput) {
-          movieApiUrl = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(searchInput)}&language=en-US&page=${page}`;
+          movieApiUrl = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(searchInput)}&language=en-US&page=${currentPage}`;
         } else {
-          movieApiUrl = `https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=${page}`;
+          movieApiUrl = `https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=${currentPage}`;
         }
 
         const moviesRes = await axios.get(movieApiUrl, { headers });
         setMovies(moviesRes.data.results || []);
-        setTotalPages(moviesRes.data.total_pages || 1);
+        const cappedPages =
+          moviesRes.data.total_pages > 500 ? 500 : moviesRes.data.total_pages;
+        setTotalPages(cappedPages || 1);
       } catch (error) {
         console.error("Failed fetching movie repository data stream:", error);
       } finally {
@@ -61,7 +73,13 @@ export default function Page() {
     };
 
     fetchMovies();
-  }, [page, searchInput, urlGenreId]);
+  }, [currentPage, searchInput, urlGenreId]);
+
+  const createPageUrl = (pageNumber: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", pageNumber.toString());
+    return `/upcoming?${params.toString()}`;
+  };
 
   const toggleGenre = (genre: { id: number; name: string }) => {
     if (!genre) return;
@@ -122,9 +140,7 @@ export default function Page() {
               </div>
             )}
           </div>
-
           <div className="h-auto w-px bg-gray-200" aria-hidden="true" />
-
           <div className="flex flex-col w-80 shrink-0">
             <h2 className="font-bold text-lg">Search by genre</h2>
             <h3 className="text-zinc-400 text-xs mb-4">
@@ -134,6 +150,9 @@ export default function Page() {
               <MovieGenres toggleGenre={toggleGenre} />
             </div>
           </div>
+        </div>
+        <div className="flex justify-center items-center gap-4 mt-12 pb-6">
+          <MoviePagination currentPage={currentPage} totalPages={totalPages} />
         </div>
       </main>
       <Footer />

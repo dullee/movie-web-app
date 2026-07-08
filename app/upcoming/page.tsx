@@ -6,17 +6,9 @@ import Header from "../_components/header";
 import Footer from "../_components/footer";
 import MovieCard from "../_components/movieCard";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { useSearchParams, useRouter } from "next/navigation";
 import MovieCardSkeleton from "../_components/moveCardSkeleton";
+import MoviePagination from "../_components/pagination";
 
 export default function UpcomingPage() {
   const [movies, setMovies] = useState<any[]>([]);
@@ -27,7 +19,6 @@ export default function UpcomingPage() {
   const headers = { Authorization: `Bearer ${API_READ_ACCESS_TOKEN}` };
 
   const searchParam = useSearchParams();
-  const router = useRouter();
 
   const currentPage = Number(searchParam.get("page")) || 1;
 
@@ -54,12 +45,6 @@ export default function UpcomingPage() {
     fetchUpcomingMovies();
   }, [currentPage]);
 
-  const createPageUrl = (pageNumber: number) => {
-    const params = new URLSearchParams(searchParam.toString());
-    params.set("page", pageNumber.toString());
-    return `/upcoming?${params.toString()}`;
-  };
-
   return (
     <div className="flex flex-col min-h-screen bg-white text-black">
       <Header />
@@ -84,53 +69,7 @@ export default function UpcomingPage() {
         )}
 
         <div className="flex justify-center items-center gap-4 mt-12 pb-6">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  href={currentPage > 1 ? createPageUrl(currentPage - 1) : "#"}
-                />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">{currentPage}</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink
-                  href={
-                    currentPage < totalPages
-                      ? createPageUrl(currentPage + 1)
-                      : "#"
-                  }
-                  isActive
-                >
-                  {currentPage < totalPages && currentPage + 1}
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink
-                  href={
-                    currentPage <= totalPages - 2
-                      ? createPageUrl(currentPage + 2)
-                      : "#"
-                  }
-                >
-                  {currentPage + 2}
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext
-                  href={
-                    currentPage < totalPages
-                      ? createPageUrl(currentPage + 1)
-                      : "#"
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <MoviePagination currentPage={currentPage} totalPages={totalPages} />
         </div>
       </main>
 

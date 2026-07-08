@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import Footer from "./_components/footer";
 import Header from "./_components/header";
 import Upcoming from "./_components/upcoming";
+import TopRatedMovies from "./_components/topRated";
+import Popular from "./_components/popular";
 import MovieCarousel from "./_components/movieCarousel";
 import MovieCarouselSkeleton from "./_components/movieCarouselSkeleton";
 
@@ -20,26 +22,38 @@ export default function Home() {
   const [popularMovies, setPopularMovies] = useState<any[]>([]);
   const [nowPlayingMovies, setNowPlayingMovies] = useState<any[]>([]);
   const [upcomingMovies, setUpcomingMovies] = useState<any[]>([]);
+  const [topRatedMovies, setTopRatedMovies] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const [nowPlayingRes, upcomingRes, popularRes] = await Promise.all([
-          axios.get(
-            `${BASE_API}/movie/now_playing?language=en-US&page=${page}`,
-            { headers },
-          ),
-          axios.get(`${BASE_API}/movie/upcoming?language=en-US&page=${page}`, {
-            headers,
-          }),
-          axios.get(`${BASE_API}/movie/popular?language=en-US&page=${page}`, {
-            headers,
-          }),
-        ]);
+        const [nowPlayingRes, upcomingRes, popularRes, topRatedRes] =
+          await Promise.all([
+            axios.get(
+              `${BASE_API}/movie/now_playing?language=en-US&page=${page}`,
+              { headers },
+            ),
+            axios.get(
+              `${BASE_API}/movie/upcoming?language=en-US&page=${page}`,
+              {
+                headers,
+              },
+            ),
+            axios.get(`${BASE_API}/movie/popular?language=en-US&page=${page}`, {
+              headers,
+            }),
+            axios.get(
+              `${BASE_API}/movie/top_rated?language=en-US&page=${page}`,
+              {
+                headers,
+              },
+            ),
+          ]);
 
         setNowPlayingMovies(nowPlayingRes.data.results || []);
         setUpcomingMovies(upcomingRes.data.results || []);
         setPopularMovies(popularRes.data.results || []);
+        setTopRatedMovies(topRatedRes.data.results || []);
       } catch (error) {
         console.error("Failed to load home page sections", error);
       } finally {
@@ -60,6 +74,8 @@ export default function Home() {
       )}
       <div className="flex flex-col items-center bg-white">
         <Upcoming movies={upcomingMovies} loading={loading} />
+        <TopRatedMovies movies={topRatedMovies} loading={loading} />
+        <Popular movies={popularMovies} loading={loading} />
       </div>
       <Footer />
     </div>
