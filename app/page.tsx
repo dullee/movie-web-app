@@ -65,14 +65,14 @@ export default function Home() {
   }, [page]);
 
   return (
-    <div className="flex flex-col flex-1 bg-zinc-50  dark:bg-black relative">
+    <div className="flex flex-col flex-1 bg-background  dark:bg-black relative">
       <Header></Header>
       {loading ? (
         <MovieCarouselSkeleton />
       ) : (
         <MovieCarousel movies={nowPlayingMovies} />
       )}
-      <div className="flex flex-col items-center bg-white">
+      <div className="flex flex-col items-center bg-background dark:bg-black">
         <Upcoming movies={upcomingMovies} loading={loading} />
         <TopRatedMovies movies={topRatedMovies} loading={loading} />
         <Popular movies={popularMovies} loading={loading} />

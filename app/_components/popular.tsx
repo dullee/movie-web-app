@@ -14,7 +14,7 @@ export default function Popular({
   }
 
   return (
-    <div className="flex flex-col w-full max-w-360 px-20 bg-white">
+    <div className="flex flex-col w-full max-w-360 px-20 bg-white dark:bg-black">
       <div className="flex flex-row justify-between pt-13 pb-8">
         <h1>Popular</h1>
         <Link href="/popular" className="cursor-pointer hover:underline">

@@ -108,9 +108,9 @@ export default function Page() {
           );
 
   return (
-    <div className="flex flex-col min-h-screen bg-white text-black px-20">
+    <div className="flex flex-col min-h-screen bg-white text-black dark:text-white  dark:bg-black">
       <Header />
-      <main className="flex-1 w-full pt-32">
+      <main className="flex-1 w-full pt-32 px-20">
         <h1 className="text-2xl font-bold">Search Results</h1>
         <h2 className="text-zinc-500 text-sm mt-1">
           {displayedMovies?.length} results for "

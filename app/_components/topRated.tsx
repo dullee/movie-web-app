@@ -14,7 +14,7 @@ export default function TopRatedMovies({
   }
 
   return (
-    <div className="flex flex-col w-full max-w-360 px-20 bg-white">
+    <div className="flex flex-col w-full max-w-360 px-20 bg-white dark:bg-black">
       <div className="flex flex-row justify-between pt-13 pb-8">
         <h1>Top Rated</h1>
         <Link href="/top-rated" className="cursor-pointer hover:underline">

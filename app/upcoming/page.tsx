@@ -46,11 +46,11 @@ export default function UpcomingPage() {
   }, [currentPage]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white text-black">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-black text-black">
       <Header />
 
-      <main className="flex-1 w-full max-w-360 mx-auto p-20 pt-32">
-        <div className="mb-8">
+      <main className="dark:bg-black flex-1 w-full max-w-360 mx-auto p-20 pt-32">
+        <div className="mb-8 dark:bg-black">
           <h1 className="text-3xl font-bold tracking-tight">Upcoming</h1>
         </div>
 

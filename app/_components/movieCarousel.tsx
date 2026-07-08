@@ -18,7 +18,7 @@ export default function MovieCarousel({ movies }: { movies: any[] }) {
     setShowTrailer(false);
   };
   return (
-    <Carousel className="w-full relative flex h-[600xp] pt-25 bg-white">
+    <Carousel className="w-full relative flex h-[600xp] pt-25 bg-white dark:bg-black">
       <CarouselContent>
         {movies?.slice(0, 3).map((movie) => (
           <CarouselItem key={movie.id} className="flex justify-center ">

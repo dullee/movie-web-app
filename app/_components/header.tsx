@@ -19,8 +19,27 @@ export default function Header() {
     );
   };
 
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme) {
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+      localStorage.setItem("theme", "light");
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    const savedTheme = localStorage.getItem("theme");
+
+    const newTheme = savedTheme === "dark" ? "light" : "dark";
+    localStorage.setItem("theme", newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+    console.log(localStorage.getItem("theme"));
+  };
   return (
-    <div className="fixed top-0 flex flex-row text-black bg-white justify-between w-full px-20 pt-5 pb-9 z-10">
+    <div className="fixed top-0 flex flex-row text-black bg-white dark:bg-black justify-between w-full px-20 pt-5 pb-9 z-10">
       <Link href="/">
         <div className="text-[#4338CA] font-bold italic font-inter">
           Movie Z
@@ -44,7 +63,9 @@ export default function Header() {
         <SearchBar />
       </div>
 
-      <Button className="cursor-pointer border">Dark mode</Button>
+      <Button className="cursor-pointer border" onClick={toggleDarkMode}>
+        Dark mode
+      </Button>
     </div>
   );
 }
