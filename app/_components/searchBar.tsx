@@ -38,7 +38,7 @@ export default function SearchBar({}) {
     const delayDebounceFn = setTimeout(async () => {
       setLoadingSearchResults(true);
       try {
-        const res = await axios.get<{ results: TMDBMovie[] }>(
+        const res = await axios.get(
           `${BASE_API}/search/movie?query=${encodeURIComponent(searchInput)}&language=en-US&page=1`,
           { headers },
         );
@@ -66,7 +66,7 @@ export default function SearchBar({}) {
         />
         <InputGroupAddon>
           {searchInput && (
-            <div className="absolute top-11 translate-x-1/5 bg-white w-[577px] border p-5 z-20 min-w-[200px] overflow-scroll gap-5">
+            <div className="absolute top-11 translate-x-1/5 bg-white w-144.25 border p-5 z-20 min-w-50 overflow-scroll gap-5">
               {loadingSearchResults ? (
                 <div>Loading...</div>
               ) : searchOuput?.length === 0 ? (

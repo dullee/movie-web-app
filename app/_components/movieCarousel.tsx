@@ -35,7 +35,7 @@ export default function MovieCarousel({ movies }: { movies: any[] }) {
                   height={600}
                   loading="eager"
                   className="h-[600px] object-cover"
-                  src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                  src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
                 />
                 <div className="absolute top-1/3 left-1/8 max-w-1/4 text-white">
                   <p className="">Now Playing:</p>
