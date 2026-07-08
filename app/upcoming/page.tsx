@@ -5,29 +5,46 @@ import axios from "axios";
 import Header from "../_components/header";
 import Footer from "../_components/footer";
 import MovieCard from "../_components/movieCard";
-import { Button } from "@/components/ui/button";
+
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { useSearchParams, useRouter } from "next/navigation";
 import MovieCardSkeleton from "../_components/moveCardSkeleton";
 
 export default function UpcomingPage() {
   const [movies, setMovies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
 
   const API_READ_ACCESS_TOKEN: string =
     "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OWE3OGQ2OTcwZWQwMjVhM2M4OTJhYWMzMmU5MDIyMyIsIm5iZiI6MTc4MjM1NjE0OC45OTMsInN1YiI6IjZhM2M5OGI0ZmIwMGJlY2M0NDNlNWJkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MIxDzsEjJDNt6C-EpUX1pBSMbTbxjFyggM_M_q4pC04";
   const headers = { Authorization: `Bearer ${API_READ_ACCESS_TOKEN}` };
+
+  const searchParam = useSearchParams();
+  const router = useRouter();
+
+  const currentPage = Number(searchParam.get("page")) || 1;
+
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchUpcomingMovies = async () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=${page}`,
+          `https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=${currentPage}`,
           { headers },
         );
         setMovies(res.data.results || []);
-        setTotalPages(res.data.total_pages || 1);
+        const cappedPages =
+          res.data.total_pages > 500 ? 500 : res.data.total_pages;
+        setTotalPages(cappedPages || 1);
       } catch (error) {
         console.error("Failed fetching upcoming view:", error);
       } finally {
@@ -35,7 +52,13 @@ export default function UpcomingPage() {
       }
     };
     fetchUpcomingMovies();
-  }, [page]);
+  }, [currentPage]);
+
+  const createPageUrl = (pageNumber: number) => {
+    const params = new URLSearchParams(searchParam.toString());
+    params.set("page", pageNumber.toString());
+    return `/upcoming?${params.toString()}`;
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-black">
@@ -61,32 +84,53 @@ export default function UpcomingPage() {
         )}
 
         <div className="flex justify-center items-center gap-4 mt-12 pb-6">
-          <Button
-            variant="outline"
-            disabled={page === 1}
-            onClick={() => setPage((p) => p - 1)}
-            className="text-black"
-          >
-            Previous
-          </Button>{" "}
-          <Button>{page}</Button>{" "}
-          <Button
-            variant="outline"
-            disabled={page === totalPages}
-            onClick={() => setPage((p) => p + 1)}
-            className="text-black"
-          >
-            {page + 1}
-          </Button>{" "}
-          <span className="text-sm text-black">...</span>
-          <Button
-            variant="outline"
-            disabled={page > totalPages - 4}
-            onClick={() => setPage((p) => p + 4)}
-            className="text-black"
-          >
-            {page + 4}
-          </Button>
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href={currentPage > 1 ? createPageUrl(currentPage - 1) : "#"}
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#">{currentPage}</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink
+                  href={
+                    currentPage < totalPages
+                      ? createPageUrl(currentPage + 1)
+                      : "#"
+                  }
+                  isActive
+                >
+                  {currentPage < totalPages && currentPage + 1}
+                </PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink
+                  href={
+                    currentPage <= totalPages - 2
+                      ? createPageUrl(currentPage + 2)
+                      : "#"
+                  }
+                >
+                  {currentPage + 2}
+                </PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  href={
+                    currentPage < totalPages
+                      ? createPageUrl(currentPage + 1)
+                      : "#"
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       </main>
 
