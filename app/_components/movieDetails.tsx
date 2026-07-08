@@ -108,6 +108,7 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
           <Image
             width={290}
             height={428}
+            loading="eager"
             src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
             className="rounded-xl object-cover shadow-lg border  shrink-0"
             alt={movie.title}
@@ -122,10 +123,11 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
             >
               <PlayIcon className="fill-black" />
             </Button>
-
+            
             <Image
               width={760}
               height={428}
+              loading="eager"
               src={`https://image.tmdb.org/t/p/w1280/${movie.backdrop_path}`}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 cursor-pointer"
               alt={movie.title}

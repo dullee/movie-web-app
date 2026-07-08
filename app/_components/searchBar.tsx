@@ -28,6 +28,16 @@ export default function SearchBar({}) {
     }
   };
 
+  interface movieProps {
+    movie: {
+      id: number;
+      title: string;
+      poster_path: string;
+      vote_average: number;
+      release_date: string;
+    };
+  }
+
   useEffect(() => {
     if (!searchInput.trim()) {
       setSearchOutput([]);
@@ -73,7 +83,7 @@ export default function SearchBar({}) {
                 <div>No Results</div>
               ) : (
                 <>
-                  {searchOuput?.slice(0, 5).map((movie) => (
+                  {searchOuput?.slice(0, 5).map(({ movie }: movieProps) => (
                     <div key={movie.id} className="flex flex-row">
                       <Image
                         height={300}

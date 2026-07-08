@@ -22,9 +22,7 @@ export default function MovieCard({
 }: MovieCardProps) {
   if (!movie || !movie.id) return null;
 
-  const posterSrc = movie.poster_path
-    ? `${IMAGE_SERVICE_URL}/w342${movie.poster_path}`
-    : "/placeholder-poster.png";
+  const posterSrc = `${IMAGE_SERVICE_URL}/w342${movie.poster_path}`;
 
   const rating = movie.vote_average
     ? (Math.round(movie.vote_average * 10) / 10).toFixed(1)
@@ -35,7 +33,7 @@ export default function MovieCard({
       <Card
         className={`flex flex-col ${widthClass} bg-[#F4F4F5] dark:bg-zinc-900 text-black dark:text-white rounded-xl cursor-pointer overflow-hidden transition-transform hover:scale-[1.02] duration-300 border-none`}
       >
-        <div className="relative w-full aspect-[2/3] bg-zinc-200 dark:bg-zinc-800">
+        <div className="relative w-full aspect-2/3 bg-zinc-200 dark:bg-zinc-800">
           <Image
             alt={movie.title || "Movie Poster"}
             src={posterSrc}
