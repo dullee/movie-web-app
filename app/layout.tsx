@@ -5,11 +5,7 @@ import "./globals.css";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-});
-
-const interTight = Inter_Tight({
-  variable: "--font-inter-tight",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -22,22 +18,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const themeScript = `(function() {
-  const savedTheme = localStorage.getItem('theme');
-  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
-    document.documentElement.classList.add('dark');
-  }
-})();`;
+  //   const themeScript = `(function() {
+  //   const savedTheme = localStorage.getItem('theme');
+  //   const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  //   if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+  //     document.documentElement.classList.add('dark');
+  //   }
+  // })();`;
   return (
     <html
       lang="en"
-      suppressHydrationWarning
-      className={`${inter.variable} ${interTight.variable} h-full antialiased`}
+      // suppressHydrationWarning
+      className={`${inter.variable} h-full antialiased`}
     >
-      <head>
+      {/* <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
+      </head> */}
       <body className="min-h-full bg-background flex flex-col">{children}</body>
     </html>
   );

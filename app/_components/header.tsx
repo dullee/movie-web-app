@@ -6,11 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import MovieGenres from "./movieGenres";
+import { SunIcon } from "lucide-react";
+import { MoonIcon } from "lucide-react";
 
 export default function Header() {
-  const [genreIds, setGenreId] = useState<any[]>([]);
-  const [selectedGenreId, setSelectedGenreId] = useState<number>(0);
   const [showGenreList, setShowGenreList] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const router = useRouter();
   const toggleGenre = (genre: { id: number; name: string }) => {
     setShowGenreList(false);
@@ -21,6 +22,7 @@ export default function Header() {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
+    setDarkMode(savedTheme === "dark");
 
     if (savedTheme) {
       document.documentElement.setAttribute("data-theme", savedTheme);
@@ -32,7 +34,7 @@ export default function Header() {
 
   const toggleDarkMode = () => {
     const savedTheme = localStorage.getItem("theme");
-
+    setDarkMode(!darkMode);
     const newTheme = savedTheme === "dark" ? "light" : "dark";
     localStorage.setItem("theme", newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);
@@ -63,8 +65,12 @@ export default function Header() {
         <SearchBar />
       </div>
 
-      <Button className="cursor-pointer border" onClick={toggleDarkMode}>
-        Dark mode
+      <Button
+        variant={"outline"}
+        className="cursor-pointer border dark:text-white"
+        onClick={toggleDarkMode}
+      >
+        {darkMode ? <SunIcon /> : <MoonIcon />}
       </Button>
     </div>
   );
