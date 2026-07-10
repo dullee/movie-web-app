@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Card } from "@/components/ui/card";
 import { Search } from "lucide-react";
 
 import {
@@ -11,9 +12,17 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 
+interface movieProps {
+  id: number;
+  title: string;
+  poster_path: string;
+  vote_average: number;
+  release_date: string;
+}
+
 export default function SearchBar({}) {
   const [searchInput, setSearchInput] = useState("");
-  const [searchOuput, setSearchOutput] = useState<any[]>([]);
+  const [searchOuput, setSearchOutput] = useState<movieProps[]>([]);
   const [loadingSearchResults, setLoadingSearchResults] = useState(true);
 
   const BASE_API: string = "https://api.themoviedb.org/3";
@@ -27,16 +36,6 @@ export default function SearchBar({}) {
       window.location.href = `/search?query=${encodeURIComponent(searchInput.trim())}`;
     }
   };
-
-  interface movieProps {
-    movie: {
-      id: number;
-      title: string;
-      poster_path: string;
-      vote_average: number;
-      release_date: string;
-    };
-  }
 
   useEffect(() => {
     if (!searchInput.trim()) {
@@ -76,37 +75,53 @@ export default function SearchBar({}) {
         />
         <InputGroupAddon>
           {searchInput && (
-            <div className="absolute top-11 translate-x-1/5 bg-white w-144.25 border p-5 z-20 min-w-50 overflow-scroll gap-5">
+            <div className="absolute top-11 translate-x-1/5 bg-white w-144.25 border p-5 z-20 min-w-50 overflow-scroll ">
               {loadingSearchResults ? (
                 <div>Loading...</div>
               ) : searchOuput?.length === 0 ? (
                 <div>No Results</div>
               ) : (
                 <>
-                  {searchOuput?.slice(0, 5).map(({ movie }: movieProps) => (
-                    <div key={movie.id} className="flex flex-row">
-                      <Image
-                        height={300}
-                        width={200}
-                        alt={movie.title}
-                        src={`${IMAGE_SERVICE_URL}/w500${movie.poster_path}`}
-                        className="w-20"
-                      />
+                  {searchOuput?.slice(0, 5).map((movie) => (
+                    <div key={movie.id} className="flex flex-row border-b pb-5">
+                      <Link href={`/movie/${movie.id}`}>
+                        <Card>
+                          <Image
+                            height={300}
+                            width={200}
+                            alt={movie.title}
+                            src={`${IMAGE_SERVICE_URL}/w500${movie.poster_path}`}
+                            className="w-20"
+                          />
+                        </Card>
+                      </Link>
                       <div className="flex justify-between w-full px-5 py-2">
                         <div className="flex flex-col">
-                          <p>{movie.title}</p>
+                          <Link href={`/movie/${movie.id}`}>
+                            <p className="hover:underline">{movie.title}</p>
+                          </Link>
+
                           <p>{Math.round(movie.vote_average * 10) / 10}/10</p>
                           <p>{movie.release_date?.slice(0, 4)}</p>
                         </div>
-                        <Link href={`/movie/${movie.id}`}>See More</Link>
+                        <Link
+                          href={`/movie/${movie.id}`}
+                          className="hover:underline"
+                        >
+                          See More
+                        </Link>
                       </div>
+                      <hr></hr>
                     </div>
                   ))}
 
                   <Link
                     href={`/search?query=${encodeURIComponent(searchInput)}`}
                   >
-                    See more "{searchInput}"
+                    <p className="hover:underline pt-5">
+                      {" "}
+                      See all results for "{searchInput}"
+                    </p>
                   </Link>
                 </>
               )}
@@ -114,7 +129,6 @@ export default function SearchBar({}) {
           )}
           <Search />
         </InputGroupAddon>
-        <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
       </InputGroup>
     </div>
   );
