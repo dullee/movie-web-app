@@ -76,7 +76,7 @@ export default function SearchBar({}) {
         />
         <InputGroupAddon>
           {searchInput && (
-            <div className="absolute top-11 translate-x-1/5 bg-white w-144.25 border p-3 z-20 min-w-50 rounded-lg">
+            <div className="absolute top-11 translate-x-1/5 bg-background text-foreground  dark:bg-black w-144.25 border p-3 z-20 min-w-50 rounded-lg">
               {loadingSearchResults ? (
                 <div>Loading...</div>
               ) : searchOuput?.length === 0 ? (
@@ -101,7 +101,7 @@ export default function SearchBar({}) {
                         <div className="flex flex-col justify-between w-full px-2 py-2">
                           <div className="flex flex-col">
                             <Link href={`/movie/${movie.id}`}>
-                              <p className="hover:underline text-black font-semibold text-[20px]">
+                              <p className="hover:underline text-foreground font-semibold text-[20px]">
                                 {movie.title}
                               </p>
                             </Link>
@@ -113,7 +113,7 @@ export default function SearchBar({}) {
                                 src={"/Star.svg"}
                               />
                               <div className="flex flex-row items-baseline">
-                                <p className="font-medium text-[14px] text-black">
+                                <p className="font-medium text-[14px] text-foreground">
                                   {Math.round(movie.vote_average * 10) / 10}
                                 </p>
                                 <p className="font-normal text-xs text-[#71717A]">
@@ -123,9 +123,7 @@ export default function SearchBar({}) {
                             </div>
                           </div>
                           <div className="flex flex-row justify-between">
-                            <p className="text-black">
-                              {movie.release_date?.slice(0, 4)}
-                            </p>
+                            <p>{movie.release_date?.slice(0, 4)}</p>
                             <Link
                               href={`/movie/${movie.id}`}
                               className="hover:underline  flex flex-row items-center"
@@ -144,8 +142,7 @@ export default function SearchBar({}) {
                   <Link
                     href={`/search?query=${encodeURIComponent(searchInput)}`}
                   >
-                    <p className="hover:underline pt-5">
-                      {" "}
+                    <p className="hover:underline py-[10px]">
                       See all results for "{searchInput}"
                     </p>
                   </Link>
