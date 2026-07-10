@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRightIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Search } from "lucide-react";
 
@@ -75,7 +76,7 @@ export default function SearchBar({}) {
         />
         <InputGroupAddon>
           {searchInput && (
-            <div className="absolute top-11 translate-x-1/5 bg-white w-144.25 border p-5 z-20 min-w-50 overflow-scroll ">
+            <div className="absolute top-11 translate-x-1/5 bg-white w-144.25 border p-3 z-20 min-w-50 rounded-lg">
               {loadingSearchResults ? (
                 <div>Loading...</div>
               ) : searchOuput?.length === 0 ? (
@@ -83,35 +84,60 @@ export default function SearchBar({}) {
               ) : (
                 <>
                   {searchOuput?.slice(0, 5).map((movie) => (
-                    <div key={movie.id} className="flex flex-row border-b pb-5">
-                      <Link href={`/movie/${movie.id}`}>
-                        <Card>
-                          <Image
-                            height={300}
-                            width={200}
-                            alt={movie.title}
-                            src={`${IMAGE_SERVICE_URL}/w500${movie.poster_path}`}
-                            className="w-20"
-                          />
-                        </Card>
-                      </Link>
-                      <div className="flex justify-between w-full px-5 py-2">
-                        <div className="flex flex-col">
-                          <Link href={`/movie/${movie.id}`}>
-                            <p className="hover:underline">{movie.title}</p>
-                          </Link>
-
-                          <p>{Math.round(movie.vote_average * 10) / 10}/10</p>
-                          <p>{movie.release_date?.slice(0, 4)}</p>
-                        </div>
+                    <div key={movie.id} className="flex flex-col ">
+                      <div className="flex flex-row">
                         <Link
                           href={`/movie/${movie.id}`}
-                          className="hover:underline"
+                          className="w-[67px] h-[100px] shrink-0 rounded-md m-2 p-0 overflow-hidden border"
                         >
-                          See More
+                          <Image
+                            height={200}
+                            width={100}
+                            alt={movie.title}
+                            src={`${IMAGE_SERVICE_URL}/w500${movie.poster_path}`}
+                            className="object-cover"
+                          />
                         </Link>
+                        <div className="flex flex-col justify-between w-full px-2 py-2">
+                          <div className="flex flex-col">
+                            <Link href={`/movie/${movie.id}`}>
+                              <p className="hover:underline text-black font-semibold text-[20px]">
+                                {movie.title}
+                              </p>
+                            </Link>
+                            <div className="flex flex-row">
+                              <Image
+                                width={16}
+                                height={18}
+                                alt="star"
+                                src={"/Star.svg"}
+                              />
+                              <div className="flex flex-row items-baseline">
+                                <p className="font-medium text-[14px] text-black">
+                                  {Math.round(movie.vote_average * 10) / 10}
+                                </p>
+                                <p className="font-normal text-xs text-[#71717A]">
+                                  /10
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex flex-row justify-between">
+                            <p className="text-black">
+                              {movie.release_date?.slice(0, 4)}
+                            </p>
+                            <Link
+                              href={`/movie/${movie.id}`}
+                              className="hover:underline  flex flex-row items-center"
+                            >
+                              <p className="p-2">See More </p>
+                              <ArrowRightIcon size={16} />
+                            </Link>
+                          </div>
+                        </div>
                       </div>
-                      <hr></hr>
+
+                      <hr className="pt-2"></hr>
                     </div>
                   ))}
 
