@@ -41,7 +41,7 @@ export default function Header() {
     console.log(localStorage.getItem("theme"));
   };
   return (
-    <div className="fixed top-0 flex flex-row text-black bg-white dark:bg-black justify-between w-full px-20 pt-5 pb-9 z-10">
+    <div className="fixed top-0 flex flex-row text-foreground bg-white dark:bg-black justify-between w-full px-20 pt-5 pb-9 z-10">
       <Link href="/">
         <div className="text-[#4338CA] font-bold italic font-inter">
           Movie Z
