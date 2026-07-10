@@ -31,7 +31,7 @@ export default function MovieCard({
   return (
     <Link href={`/movie/${movie.id}`} className="block">
       <Card
-        className={`flex flex-col ${widthClass} bg-[#F4F4F5] dark:bg-zinc-900 text-black dark:text-white rounded-xl cursor-pointer overflow-hidden transition-transform hover:scale-[1.02] duration-300 border-none`}
+        className={`flex flex-col ${widthClass} gap-[2px] p-0 bg-[#F4F4F5] dark:bg-zinc-900 text-black dark:text-white rounded-xl cursor-pointer overflow-hidden transition-transform hover:scale-[1.02] duration-300 border-none`}
       >
         <div className="relative w-full aspect-2/3 bg-zinc-200 dark:bg-zinc-800">
           <Image
@@ -44,14 +44,17 @@ export default function MovieCard({
           />
         </div>
 
-        <CardContent className="p-3 flex flex-col flex-1 justify-between gap-1">
+        <CardContent className="p-2 flex flex-col flex-1 justify-between gap-1">
           <div className="flex items-center text-xs font-semibold text-zinc-600 dark:text-zinc-400">
             <span className="text-amber-500 font-bold mr-0.5">★</span>
             <p className="text-black dark:text-white">{rating}</p>
             <span>/10</span>
           </div>
 
-          <CardTitle className="text-sm font-bold truncate" title={movie.title}>
+          <CardTitle
+            className="text-sm font-bold truncate h-[56px]"
+            title={movie.title}
+          >
             {movie.title}
           </CardTitle>
         </CardContent>
