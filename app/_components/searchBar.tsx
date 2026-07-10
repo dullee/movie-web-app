@@ -105,7 +105,7 @@ export default function SearchBar({}) {
                                 {movie.title}
                               </p>
                             </Link>
-                            <div className="flex flex-row">
+                            <div className="flex flex-row gap-1">
                               <Image
                                 width={16}
                                 height={18}
