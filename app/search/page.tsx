@@ -133,7 +133,7 @@ export default function Page() {
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
                 {displayedMovies.map((movie) => (
                   <MovieCard key={movie.id} movie={movie} widthClass="w-full" />
                 ))}
@@ -146,7 +146,7 @@ export default function Page() {
             <h3 className="text-zinc-400 text-xs mb-4">
               See list of movies by genre
             </h3>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-wrap gap-2">
               <MovieGenres toggleGenre={toggleGenre} />
             </div>
           </div>

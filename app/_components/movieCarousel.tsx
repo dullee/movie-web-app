@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { PlayIcon } from "lucide-react";
 import Image from "next/image";
 import MovieTrailerPlayer from "./movieTrailerPlayer";
 
@@ -49,9 +50,10 @@ export default function MovieCarousel({ movies }: { movies: any[] }) {
                   <Button
                     onClick={() => setShowTrailer(!showTrailer)}
                     disabled={showTrailer}
-                    className="absolute rounded-md text-black px-4 py-3 bg-[#F4F4F5] cursor-pointer"
+                    className="rounded-md px-4 py-3 h-fit text-black hover:text-white bg-[#F4F4F5]"
                   >
-                    Watch Trailer
+                    <PlayIcon />
+                    <span>Watch Trailer</span>
                   </Button>
                 </div>
                 <CarouselNext className="right-10 bg-black/50 text-white border-zinc-700 hover:bg-black/80 hover:text-white transition" />

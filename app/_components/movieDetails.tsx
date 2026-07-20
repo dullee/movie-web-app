@@ -96,11 +96,22 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
           </div>
           <div className="flex flex-col text-black items-end">
             <p className="text-xs  uppercase font-semibold">Rating</p>
-            <p className="text-2xl font-bold text-yellow-500">
-              {Math.round(movie.vote_average * 10) / 10}
-              <span className="text-sm text-zinc-500">/10</span>
-            </p>
-            <p>{movie.vote_count}</p>
+            <div className="flex flex-row">
+              <Image
+                width={28}
+                height={28}
+                loading={"eager"}
+                alt="star"
+                src={"/Star.svg"}
+              />
+              <div>
+                <p className="text-2xl font-bold">
+                  {Math.round(movie.vote_average * 10) / 10}
+                  <span className="text-sm text-zinc-500">/10</span>
+                </p>
+                <p>{movie.vote_count}</p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -123,7 +134,7 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
             >
               <PlayIcon className="fill-black" />
             </Button>
-            
+
             <Image
               width={760}
               height={428}
