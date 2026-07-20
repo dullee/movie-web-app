@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -64,10 +65,13 @@ export default function MovieGenres({
     <Button
       key={genre}
       variant="outline"
-      className="rounded-full"
+      className=" rounded-full w-fit pr-px px-0.5 text-xs h-4"
       onClick={() => sendGenre(genre)}
     >
-      {genre === "Science Fiction" ? "Sci-Fi" : genre}
+      <p className="flex pl-2.5 font-semibold">
+        {genre === "Science Fiction" ? "Sci-Fi" : genre}
+      </p>
+      <ChevronRight strokeWidth={1.5}/>
     </Button>
   ));
 }

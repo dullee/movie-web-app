@@ -64,7 +64,7 @@ export default function SearchBar({}) {
   }, [searchInput]);
 
   return (
-    <div className="relative">
+    <div className="relative w-[379px]">
       <InputGroup className="max-w-xs">
         <InputGroupInput
           onKeyDown={handleKeyDown}

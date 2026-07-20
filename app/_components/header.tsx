@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import MovieGenres from "./movieGenres";
-import { SunIcon } from "lucide-react";
-import { MoonIcon } from "lucide-react";
+import { SunIcon, MoonIcon, ChevronDown } from "lucide-react";
 
 export default function Header() {
   const [showGenreList, setShowGenreList] = useState(false);
@@ -50,8 +49,13 @@ export default function Header() {
 
       <div className="flex flex-row gap-5 relative">
         {showGenreList && (
-          <Card className="absolute top-10">
-            <div>
+          <Card className="absolute top-10 p-5">
+            <h2 className="w-134.25 font-semibold text-2xl">Genre</h2>
+            <h3 className="font-normal text-base">
+              See lists of movies by genre
+            </h3>
+            <hr></hr>
+            <div className="flex flex-wrap gap-4">
               <MovieGenres toggleGenre={toggleGenre} />
             </div>
           </Card>
@@ -59,7 +63,9 @@ export default function Header() {
         <Button
           onClick={() => setShowGenreList(!showGenreList)}
           variant="outline"
+          className="px-4"
         >
+          <ChevronDown />
           Genre
         </Button>
         <SearchBar />

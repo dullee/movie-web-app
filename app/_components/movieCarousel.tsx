@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import MovieTrailerPlayer from "./movieTrailerPlayer";
 
@@ -45,13 +46,13 @@ export default function MovieCarousel({ movies }: { movies: any[] }) {
                     <p className="text-[#71717A]">/10</p>
                   </div>
                   <p className="max-w-4/5 text-xs py-4">{movie.overview}</p>
-                  <button
+                  <Button
                     onClick={() => setShowTrailer(!showTrailer)}
                     disabled={showTrailer}
                     className="absolute rounded-md text-black px-4 py-3 bg-[#F4F4F5] cursor-pointer"
                   >
                     Watch Trailer
-                  </button>
+                  </Button>
                 </div>
                 <CarouselNext className="right-10 bg-black/50 text-white border-zinc-700 hover:bg-black/80 hover:text-white transition" />
               </CardContent>
