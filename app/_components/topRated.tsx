@@ -1,6 +1,7 @@
 import MovieCard from "./movieCard";
 import UpcomingSkeleton from "./upcomingSkeleton";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export default function TopRatedMovies({
   movies,
@@ -16,10 +17,16 @@ export default function TopRatedMovies({
   return (
     <div className="flex flex-col w-full max-w-360 px-20 bg-white dark:bg-black">
       <div className="flex flex-row justify-between pt-13 pb-8">
-        <h1>Top Rated</h1>
-        <Link href="/top-rated" className="cursor-pointer hover:underline">
-          See more
-        </Link>
+        <h1 className="font-semibold text-2xl">Top Rated</h1>
+        <div className="px-4 py-2">
+          <Link
+            href="/top-rated"
+            className="cursor-pointer hover:underline flex flex-row items-center gap-2"
+          >
+            <span>See more</span>
+            <ArrowRight size={16} />
+          </Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-1  md:grid-cols-5 gap-8">
