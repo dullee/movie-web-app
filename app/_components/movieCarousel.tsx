@@ -22,14 +22,16 @@ export default function MovieCarousel({ movies }: { movies: any[] }) {
   return (
     <Carousel className="w-full relative flex h-[600xp] pt-25 bg-white dark:bg-black">
       <CarouselContent>
-        {movies?.slice(0, 3).map((movie) => (
-          <CarouselItem key={movie.id} className="flex justify-center ">
+        {movies?.slice(0, 3).map((movie, index) => (
+          <CarouselItem key={index} className="flex justify-center ">
             {showTrailer && (
               <MovieTrailerPlayer movieId={movie.id} onClose={closeTrailer} />
             )}
             <Card className="flex justify-center p-0 rounded-none">
               <CardContent className="flex items-center max-w-360 relative justify-center p-0">
-                <CarouselPrevious className="left-10 bg-black/50 text-white border-zinc-700 hover:bg-black/80 hover:text-white transition" />
+                {index > 0 && (
+                  <CarouselPrevious className="left-10 p-5 bg-white text-black border-none hover:bg-black/80 hover:text-white transition" />
+                )}
 
                 <Image
                   alt={movie.title}
@@ -42,21 +44,36 @@ export default function MovieCarousel({ movies }: { movies: any[] }) {
                 <div className="absolute top-1/3 left-1/8 max-w-1/4 text-white">
                   <p className="">Now Playing:</p>
                   <p className="text-4xl font-extrabold">{movie.title}</p>
-                  <div className="flex flex-row">
-                    <p>{Math.round(movie.vote_average * 10) / 10}</p>
-                    <p className="text-[#71717A]">/10</p>
+                  <div className="flex flex-row items-center  gap-1">
+                    <Image
+                      className="py-2"
+                      width={28}
+                      height={28}
+                      alt="star"
+                      src={"/Star.svg"}
+                    />
+                    <div className="flex flex-row items-center pt-1">
+                      <p className="font-semibold text-lg">
+                        {Math.round(movie.vote_average * 10) / 10}
+                      </p>
+                      <span className="text-base font-normal text-[#71717A]">
+                        /10
+                      </span>
+                    </div>
                   </div>
                   <p className="max-w-4/5 text-xs py-4">{movie.overview}</p>
                   <Button
                     onClick={() => setShowTrailer(!showTrailer)}
                     disabled={showTrailer}
-                    className="rounded-md px-4 py-3 h-fit text-black hover:text-white bg-[#F4F4F5]"
+                    className="rounded-md px-4 py-3 h-fit text-black border-none hover:text-white bg-[#F4F4F5]"
                   >
                     <PlayIcon />
                     <span>Watch Trailer</span>
                   </Button>
                 </div>
-                <CarouselNext className="right-10 bg-black/50 text-white border-zinc-700 hover:bg-black/80 hover:text-white transition" />
+                {index < 2 && (
+                  <CarouselNext className="right-10 p-5 bg-white text-black hover:bg-black/80 hover:text-white transition" />
+                )}
               </CardContent>
             </Card>
           </CarouselItem>
