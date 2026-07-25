@@ -4,11 +4,9 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import Footer from "./_components/footer";
 import Header from "./_components/header";
-import Upcoming from "./_components/upcoming";
-import TopRatedMovies from "./_components/topRated";
-import Popular from "./_components/popular";
 import MovieCarousel from "./_components/movieCarousel";
 import MovieCarouselSkeleton from "./_components/movieCarouselSkeleton";
+import MainPageMovies from "./_components/mainPageMovies";
 
 export default function Home() {
   const BASE_API: string = "https://api.themoviedb.org/3";
@@ -73,9 +71,21 @@ export default function Home() {
         <MovieCarousel movies={nowPlayingMovies} />
       )}
       <div className="flex flex-col items-center bg-background dark:bg-black">
-        <Upcoming movies={upcomingMovies} loading={loading} />
-        <TopRatedMovies movies={topRatedMovies} loading={loading} />
-        <Popular movies={popularMovies} loading={loading} />
+        <MainPageMovies
+          title="Upcoming"
+          movies={upcomingMovies}
+          loading={loading}
+        />
+        <MainPageMovies
+          title="Top Rated"
+          movies={topRatedMovies}
+          loading={loading}
+        />
+        <MainPageMovies
+          title="Popular"
+          movies={popularMovies}
+          loading={loading}
+        />
       </div>
       <Footer />
     </div>

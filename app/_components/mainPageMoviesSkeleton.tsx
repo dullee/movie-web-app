@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import MovieCardSkeleton from "./moveCardSkeleton";
 
-export default function UpcomingSkeleton() {
+export default function MainPageMoviesSkeleton() {
   return (
     <div className="flex flex-col max-w-[1440px] bg-white">
       <div className="flex flex-row justify-between pt-13 pb-8">

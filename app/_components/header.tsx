@@ -12,10 +12,11 @@ export default function Header() {
   const [showGenreList, setShowGenreList] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const router = useRouter();
+
   const toggleGenre = (genre: { id: number; name: string }) => {
     setShowGenreList(false);
     router.push(
-      `/search?genreId=${genre.id}&genreName=${encodeURIComponent(genre.name)}`,
+      `/search?genreId=${genre.id}&genreName=${encodeURIComponent(genre.name)}`
     );
   };
 
@@ -37,47 +38,56 @@ export default function Header() {
     const newTheme = savedTheme === "dark" ? "light" : "dark";
     localStorage.setItem("theme", newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);
-    console.log(localStorage.getItem("theme"));
   };
+
   return (
-    <div className="fixed top-0 flex flex-row text-foreground bg-white dark:bg-black justify-between w-full px-20 pt-5 pb-9 z-10">
-      <Link href="/">
-        <div className="text-[#4338CA] font-bold italic font-inter">
+    <div className="fixed top-0 flex flex-row items-center justify-between w-full text-foreground bg-white dark:bg-black xl:px-20 px-4 py-4 z-10">
+      <Link href="/" className="shrink-0">
+        <div className="text-[#4338CA] font-bold italic font-inter text-lg">
           Movie Z
         </div>
       </Link>
 
-      <div className="flex flex-row gap-5 relative">
-        {showGenreList && (
-          <Card className="absolute top-10 p-5">
-            <h2 className="w-134.25 font-semibold text-2xl">Genre</h2>
-            <h3 className="font-normal text-base">
-              See lists of movies by genre
-            </h3>
-            <hr></hr>
-            <div className="flex flex-wrap gap-4">
-              <MovieGenres toggleGenre={toggleGenre} />
-            </div>
-          </Card>
-        )}
+      <div className="hidden md:flex flex-row items-center gap-3 relative">
         <Button
           onClick={() => setShowGenreList(!showGenreList)}
           variant="outline"
           className="px-4"
         >
-          <ChevronDown />
+          <ChevronDown className="mr-1 h-4 w-4" />
           Genre
         </Button>
+
+        {showGenreList && (
+          <Card className="absolute top-12 left-0 p-5 z-20 w-[400px]">
+            <h2 className="font-semibold text-2xl">Genre</h2>
+            <h3 className="font-normal text-base text-muted-foreground mb-3">
+              See lists of movies by genre
+            </h3>
+            <hr className="mb-4" />
+            <div className="flex flex-wrap gap-2">
+              <MovieGenres toggleGenre={toggleGenre} />
+            </div>
+          </Card>
+        )}
+
         <SearchBar />
       </div>
 
-      <Button
-        variant={"outline"}
-        className="cursor-pointer border dark:text-white"
-        onClick={toggleDarkMode}
-      >
-        {darkMode ? <SunIcon /> : <MoonIcon />}
-      </Button>
+      <div className="flex flex-row items-center gap-2">
+        <div className="block md:hidden max-w-[180px]">
+          <SearchBar />
+        </div>
+
+        <Button
+          variant="outline"
+          className="cursor-pointer border dark:text-white shrink-0"
+          onClick={toggleDarkMode}
+          aria-label="Toggle Theme"
+        >
+          {darkMode ? <SunIcon className="h-4 w-4" /> : <MoonIcon className="h-4 w-4" />}
+        </Button>
+      </div>
     </div>
   );
 }

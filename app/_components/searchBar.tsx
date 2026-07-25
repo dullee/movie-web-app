@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { Search } from "lucide-react";
 
 import {
@@ -64,16 +63,26 @@ export default function SearchBar({}) {
   }, [searchInput]);
 
   return (
-    <div className="relative w-[379px]">
+    <div className="relative xl:w-94.75 ">
       <InputGroup className="max-w-xs">
-        <InputGroupInput
-          onKeyDown={handleKeyDown}
-          placeholder="Search..."
-          value={searchInput}
-          onChange={(e) => {
-            setSearchInput(e.target.value);
-          }}
-        />
+        <div className="pr-2">
+          <InputGroupInput
+            onKeyDown={handleKeyDown}
+            placeholder=""
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="w-0 p-0 md:hidden"
+          />
+
+          <InputGroupInput
+            onKeyDown={handleKeyDown}
+            placeholder="Search..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="hidden md:inline-flex md:w-64"
+          />
+        </div>
+
         <InputGroupAddon>
           {searchInput && (
             <div className="absolute top-11 translate-x-1/5 bg-background text-foreground  dark:bg-black w-144.25 border p-3 z-20 min-w-50 rounded-lg">

@@ -16,10 +16,7 @@ interface MovieCardProps {
   widthClass?: string;
 }
 
-export default function MovieCard({
-  movie,
-  widthClass = "w-[230px]",
-}: MovieCardProps) {
+export default function MovieCard({ movie }: MovieCardProps) {
   if (!movie || !movie.id) return null;
 
   const posterSrc = `${IMAGE_SERVICE_URL}/w342${movie.poster_path}`;
@@ -29,10 +26,10 @@ export default function MovieCard({
     : "0.0";
 
   return (
-    <Link href={`/movie/${movie.id}`} className="block">
-      <Card
-        className={`flex flex-col ${widthClass} gap-[2px] p-0 bg-[#F4F4F5] dark:bg-zinc-900 text-black dark:text-white rounded-lg cursor-pointer overflow-hidden transition-transform hover:scale-[1.02] duration-300 border-none`}
-      >
+    <Card
+      className={`flex flex-col w-full gap-0.5 p-0 bg-[#F4F4F5] dark:bg-zinc-900 text-black dark:text-white rounded-lg cursor-pointer overflow-hidden transition-transform hover:scale-[1.02] duration-300 border-none`}
+    >
+      <Link href={`/movie/${movie.id}`} className="block w-full">
         <div className="relative w-full aspect-2/3 bg-zinc-200 dark:bg-zinc-800">
           <Image
             alt={movie.title || "Movie Poster"}
@@ -63,7 +60,7 @@ export default function MovieCard({
             {movie.title}
           </CardTitle>
         </CardContent>
-      </Card>
-    </Link>
+      </Link>
+    </Card>
   );
 }
