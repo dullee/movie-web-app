@@ -1,16 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import axios from "axios";
 import Header from "../_components/header";
 import Footer from "../_components/footer";
 import MovieCard from "../_components/movieCard";
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import MovieCardSkeleton from "../_components/moveCardSkeleton";
 import MoviePagination from "../_components/pagination";
 
-export default function PopularPage() {
+function PopularContent() {
   const [movies, setMovies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,7 +19,6 @@ export default function PopularPage() {
   const headers = { Authorization: `Bearer ${API_READ_ACCESS_TOKEN}` };
 
   const searchParam = useSearchParams();
-
   const currentPage = Number(searchParam.get("page")) || 1;
 
   const [totalPages, setTotalPages] = useState(1);
@@ -30,7 +29,7 @@ export default function PopularPage() {
       try {
         const res = await axios.get(
           `https://api.themoviedb.org/3/movie/popular?language=en-US&page=${currentPage}`,
-          { headers },
+          { headers }
         );
         setMovies(res.data.results || []);
         const cappedPages =
@@ -46,33 +45,39 @@ export default function PopularPage() {
   }, [currentPage]);
 
   return (
+    <main className="flex-1 w-full max-w-360 mx-auto p-20 pt-32">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold tracking-tight">Popular</h1>
+      </div>
+
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <MovieCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+          {movies.map((movie) => (
+            <MovieCard key={movie.id} movie={movie} />
+          ))}
+        </div>
+      )}
+
+      <div className="flex justify-center items-center gap-4 mt-12 pb-6">
+        <MoviePagination currentPage={currentPage} totalPages={totalPages} />
+      </div>
+    </main>
+  );
+}
+
+export default function PopularPage() {
+  return (
     <div className="flex flex-col min-h-screen bg-white text-black">
       <Header />
-
-      <main className="flex-1 w-full max-w-360 mx-auto p-20 pt-32">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Popular</h1>
-        </div>
-
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <MovieCardSkeleton key={i} />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-            {movies.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
-          </div>
-        )}
-
-        <div className="flex justify-center items-center gap-4 mt-12 pb-6">
-          <MoviePagination currentPage={currentPage} totalPages={totalPages} />
-        </div>
-      </main>
-
+      <Suspense fallback={<div className="flex-1 pt-32 text-center">Loading popular movies...</div>}>
+        <PopularContent />
+      </Suspense>
       <Footer />
     </div>
   );

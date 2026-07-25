@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import axios from "axios";
 import Header from "../_components/header";
 import Footer from "../_components/footer";
@@ -10,7 +10,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import MovieCardSkeleton from "../_components/moveCardSkeleton";
 import MoviePagination from "../_components/pagination";
 
-export default function UpcomingPage() {
+// 1. Separate component containing useSearchParams() logic & UI
+function UpcomingContent() {
   const [movies, setMovies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -46,33 +47,46 @@ export default function UpcomingPage() {
   }, [currentPage]);
 
   return (
+    <main className="dark:bg-black flex-1 w-full max-w-360 mx-auto p-20 pt-32">
+      <div className="mb-8 dark:bg-black">
+        <h1 className="text-3xl font-bold tracking-tight">Upcoming</h1>
+      </div>
+
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <MovieCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+          {movies.map((movie) => (
+            <MovieCard key={movie.id} movie={movie} />
+          ))}
+        </div>
+      )}
+
+      <div className="flex justify-center items-center gap-4 mt-12 pb-6">
+        <MoviePagination currentPage={currentPage} totalPages={totalPages} />
+      </div>
+    </main>
+  );
+}
+
+// 2. Default export wrapped in Suspense boundary
+export default function UpcomingPage() {
+  return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-black text-black">
       <Header />
-
-      <main className="dark:bg-black flex-1 w-full max-w-360 mx-auto p-20 pt-32">
-        <div className="mb-8 dark:bg-black">
-          <h1 className="text-3xl font-bold tracking-tight">Upcoming</h1>
-        </div>
-
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <MovieCardSkeleton key={i} />
-            ))}
+      <Suspense
+        fallback={
+          <div className="flex-1 pt-32 text-center">
+            Loading upcoming movies...
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-            {movies.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
-          </div>
-        )}
-
-        <div className="flex justify-center items-center gap-4 mt-12 pb-6">
-          <MoviePagination currentPage={currentPage} totalPages={totalPages} />
-        </div>
-      </main>
-
+        }
+      >
+        <UpcomingContent />
+      </Suspense>
       <Footer />
     </div>
   );
