@@ -22,7 +22,7 @@ export default function MainPageMovies({
         <h1 className="font-semibold text-2xl">{title}</h1>
         <div className="px-4 py-2">
           <Link
-            href="/upcoming"
+            href={`/${title.toLocaleLowerCase().replaceAll(" ", "")}`}
             className="cursor-pointer hover:underline flex flex-row items-center gap-2"
           >
             <span>See more</span>

@@ -45,7 +45,6 @@ export default function MovieCard({ movie }: MovieCardProps) {
           <div className="flex items-center text-xs font-semibold text-zinc-600 dark:text-zinc-400">
             <Image alt="star" src={"/Star.svg"} width={16} height={18} />
             <div className="flex flex-row items-baseline">
-              {" "}
               <p className="text-black dark:text-white font-medium text-[14px] pl-1 leading-5">
                 {rating}
               </p>

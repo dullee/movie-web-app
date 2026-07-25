@@ -154,7 +154,6 @@ function SearchPageContent() {
           <div className="flex flex-wrap gap-2">
             <MovieGenres
               toggleGenre={toggleGenre}
-              selectedGenreIds={selectedGenreIds}
             />
           </div>
         </div>
