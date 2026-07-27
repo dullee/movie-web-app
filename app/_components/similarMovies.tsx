@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import MovieCard from "./movieCard";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 interface MovieDetailsProps {
   movieId: number;
@@ -37,9 +38,12 @@ export default function SimilarMovies({ movieId }: MovieDetailsProps) {
   return (
     <div className="flex flex-col w-full ">
       <div className="flex flex-row  justify-between pt-13 pb-8">
-        <h1>More Like this</h1>
+        <h1 className="font-semibold text-2xl">More Like this</h1>
         <Link href={`/more_like_this?id=${movieId}`}>
-          <button>See more</button>
+          <button className="text-[14px] font-medium flex flex-row items-center gap-2 cursor-pointer">
+            See more
+            <ArrowRight size={16} />
+          </button>
         </Link>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 w-full">

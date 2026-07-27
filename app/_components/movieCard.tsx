@@ -43,17 +43,23 @@ export default function MovieCard({ movie }: MovieCardProps) {
 
         <CardContent className="p-2 flex flex-col flex-1 justify-between gap-1">
           <div className="flex items-center text-xs font-semibold text-zinc-600 dark:text-zinc-400">
-            <Image alt="star" src={"/Star.svg"} width={16} height={18} />
+            <Image
+              alt="star"
+              src={"/Star.svg"}
+              width={16}
+              height={18}
+              className="h-4 md:h-4.5"
+            />
             <div className="flex flex-row items-baseline">
-              <p className="text-black dark:text-white font-medium text-[14px] pl-1 leading-5">
+              <p className="text-black dark:text-white font-medium text-xs md:text-[14px] pl-1 md:leading-5">
                 {rating}
               </p>
-              <p>/10</p>
+              <p className="">/10</p>
             </div>
           </div>
 
           <CardTitle
-            className="text-[18px] font-normal h-[56px] "
+            className="md:text-[18px] text-[14px] font-normal md:h-[56px] "
             title={movie.title}
           >
             {movie.title}

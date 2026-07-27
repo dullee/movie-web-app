@@ -149,14 +149,37 @@ export default function Page() {
         </div>
 
         <div className="flex md:flex-row flex-col-reverse gap-10 w-full items-start ">
-          <Image
-            width={290}
-            height={428}
-            loading="eager"
-            src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-            className="md:rounded-xl object-cover shadow-lg md:border shrink-0 w-25 h-37 pl-5"
-            alt={movie.title}
-          />
+          <div className="flex flex-row px-5 gap-8.5">
+            <Image
+              width={290}
+              height={428}
+              loading="eager"
+              src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+              className="md:rounded-xl object-cover shadow-lg md:border shrink-0 w-25 h-37 "
+              alt={movie.title}
+            />
+            <div className="flex flex-col md:hidden gap-5">
+              <div className="flex w-full flex-wrap gap-2  justify-start">
+                {movie.genres?.map((genre: any) => (
+                  <Badge
+                    key={genre.id}
+                    variant="secondary"
+                    className="px-3 py-1  "
+                  >
+                    {genre.name}
+                  </Badge>
+                ))}
+              </div>
+
+              <div className="w-full leading-relaxed text-sm max-w-3xlmr-auto space-y-6">
+                <div>
+                  <h3 className="text-lg font-bold hidden mb-2">Overview</h3>
+                  <p>{movie.overview}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="relative flex-1 group md:rounded-xl overflow-hidden md:border  h-107">
             <div className="absolute bottom-5 left-5 flex flex-row items-center gap-3">
               <Button
@@ -182,24 +205,31 @@ export default function Page() {
             />
           </div>
         </div>
+        <div>
+          <div className="hidden md:flex">
+            <div className="flex w-full flex-wrap gap-2 md:px-0 px-5 justify-start">
+              {movie.genres?.map((genre: any) => (
+                <Badge
+                  key={genre.id}
+                  variant="secondary"
+                  className="px-3 py-1  "
+                >
+                  {genre.name}
+                </Badge>
+              ))}
+            </div>
 
-        <div className="flex w-full flex-wrap gap-2 md:px-0 px-5 justify-start">
-          {movie.genres?.map((genre: any) => (
-            <Badge key={genre.id} variant="secondary" className="px-3 py-1  ">
-              {genre.name}
-            </Badge>
-          ))}
-        </div>
-
-        <div className="w-full leading-relaxed text-sm max-w-3xl md:px-0 px-5 mr-auto space-y-6">
-          <div>
-            <h3 className="text-lg font-bold md:inline-flex hidden mb-2">
-              Overview
-            </h3>
-            <p>{movie.overview}</p>
+            <div className="w-full leading-relaxed text-sm max-w-3xl md:px-0 px-5 mr-auto space-y-6">
+              <div>
+                <h3 className="text-lg font-bold md:inline-flex hidden mb-2">
+                  Overview
+                </h3>
+                <p>{movie.overview}</p>
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-3  pt-6">
+          <div className="space-y-3 px-5 md:px-0 pt-6">
             <div className="flex items-center border-b gap-2">
               <h2 className="w-20 font-bold  shrink-0">Director</h2>
               <div className="flex flex-wrap gap-2 ">
