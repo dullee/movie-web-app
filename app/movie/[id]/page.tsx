@@ -13,13 +13,6 @@ import Image from "next/image";
 import MovieTrailerPlayer from "@/app/_components/movieTrailerPlayer";
 import { useParams } from "next/navigation";
 
-async function getVideoDuration(videoId: string) {
-  const apiKey = process.env.YOUTUBE_API_KEY;
-  const res = await fetch();
-  const data = await res.json();
-  return data.items?.[0]?.contentDetails?.duration;
-}
-
 export default function Page() {
   const params = useParams<{ id: string }>();
   const id = parseInt(params?.id);
@@ -63,19 +56,23 @@ export default function Page() {
           (video: any) => video.site === "YouTube" && video.type === "Trailer",
         );
 
-        setTrailerKey(
-          officialTrailer
-            ? officialTrailer.key
-            : videoRes.data.results[0]?.key || null,
-        );
+        setTrailerKey(officialTrailer.key);
 
         const video = await axios.get(
-          `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${trailerKey}&key=AIzaSyBbpMOdNww_g1_7ETv3-kmaoatefyJ5JxU`,
+          `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${officialTrailer.key}&key=AIzaSyBbpMOdNww_g1_7ETv3-kmaoatefyJ5JxU`,
         );
 
-        console.log('video props',video);
-        
+        const videoDurationIso = video.data.items[0].contentDetails.duration;
 
+        setTrailerDuration(
+          videoDurationIso.replace(
+            /PT(\d+)M(\d+)S/,
+            (match: string, m: string, s: string): string =>
+              `${m}:${s.padStart(2, "0")}`,
+          ),
+        );
+
+        console.log("video", video);
       } catch (error) {
         console.error("failed to fetch movie data", error);
       } finally {
@@ -118,7 +115,7 @@ export default function Page() {
         <div className="flex justify-between w-full items-end md:px-0 px-5   pb-4">
           <div className="flex flex-col gap-1 dark:text-white">
             <h1 className="md:text-4xl text-2xl font-semibold md:font-extrabold tracking-tight">
-              {movie.title} {trailerDuration}
+              {movie.title}
             </h1>
             <p className=" text-sm">
               {movie.release_date.replaceAll("-", ".")} ·{" "}
@@ -136,6 +133,7 @@ export default function Page() {
                 loading={"eager"}
                 alt="star"
                 src={"/Star.svg"}
+                className="w-7 h-7"
               />
               <div>
                 <p className="md:text-2xl text-[14px] font-bold">
@@ -150,13 +148,13 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="flex md:flex-row flex-col-reverse gap-10 w-full items-start">
+        <div className="flex md:flex-row flex-col-reverse gap-10 w-full items-start ">
           <Image
             width={290}
             height={428}
             loading="eager"
             src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-            className="md:rounded-xl object-cover shadow-lg md:border shrink-0"
+            className="md:rounded-xl object-cover shadow-lg md:border shrink-0 w-25 h-37 pl-5"
             alt={movie.title}
           />
           <div className="relative flex-1 group md:rounded-xl overflow-hidden md:border  h-107">
@@ -171,6 +169,7 @@ export default function Page() {
                 <PlayIcon className="fill-black" />
               </Button>
               <p className="text-white">Play Trailer</p>
+              <p>{trailerDuration}</p>
             </div>
 
             <Image
@@ -194,7 +193,9 @@ export default function Page() {
 
         <div className="w-full leading-relaxed text-sm max-w-3xl md:px-0 px-5 mr-auto space-y-6">
           <div>
-            <h3 className="text-lg font-bold  mb-2">Overview</h3>
+            <h3 className="text-lg font-bold md:inline-flex hidden mb-2">
+              Overview
+            </h3>
             <p>{movie.overview}</p>
           </div>
 
