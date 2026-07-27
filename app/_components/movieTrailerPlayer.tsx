@@ -32,6 +32,8 @@ export default function MovieTrailerPlayer({
             ? officialTrailer.key
             : videoRes.data.results[0]?.key || null,
         );
+        console.log("video", officialTrailer);
+        
       } catch (error) {
         console.error("failed to fetch movie data", error);
       } finally {
@@ -42,8 +44,8 @@ export default function MovieTrailerPlayer({
   }, [movieId]);
   if (showTrailer) {
     return (
-      <div className="fixed inset-0  flex items-center justify-center z-50 p-4">
-        <div className="relative w-full max-w-4xl aspect-video  rounded-xl overflow-hidden shadow-2xl">
+      <div className="fixed inset-0  flex items-center justify-center z-50 p-4 bg-black md:bg-black/30">
+        <div className="relative w-full md:max-w-4xl aspect-video  rounded-xl overflow-hidden shadow-2xl">
           <button
             onClick={onClose}
             className="absolute top-4 right-4 bg-black/60 p-2 rounded-full hover:bg-black/80 transition text-white z-10"

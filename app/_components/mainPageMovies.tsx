@@ -33,9 +33,7 @@ export default function MainPageMovies({
 
       <div className="grid md:grid-cols-5 grid-cols-2 md:gap-8 gap-5">
         {movies?.slice(0, 10).map((movie) => (
-          <div key={movie.id} className="md:w-57.5 w-[157.5px]">
-            <MovieCard movie={movie} />
-          </div>
+          <MovieCard key={movie.id} movie={movie} />
         ))}
       </div>
     </div>

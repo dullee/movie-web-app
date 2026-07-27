@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import MovieCard from "./movieCard";
+import Link from "next/link";
 
 interface MovieDetailsProps {
   movieId: number;
@@ -37,12 +38,14 @@ export default function SimilarMovies({ movieId }: MovieDetailsProps) {
     <div className="flex flex-col w-full ">
       <div className="flex flex-row  justify-between pt-13 pb-8">
         <h1>More Like this</h1>
-        <button>See more</button>
+        <Link href={`/more_like_this?id=${movieId}`}>
+          <button>See more</button>
+        </Link>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 w-full">
         {similarMovies?.slice(0, 5).map((movie) => (
           <div key={movie.id} className="md:w-57.5 w-[157.5px]">
-            <MovieCard movie={movie} widthClass="w-full" />
+            <MovieCard movie={movie} />
           </div>
         ))}
       </div>

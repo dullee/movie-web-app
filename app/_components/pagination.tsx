@@ -36,7 +36,7 @@ export default function MoviePagination({
   if (totalPages <= 1) return null;
 
   return (
-    <Pagination className="mt-12 select-none">
+    <Pagination className="md:mt-12 mt-8 select-none md:justify-center justify-end">
       <PaginationContent>
         {/* Previous Navigation Control */}
         <PaginationItem>

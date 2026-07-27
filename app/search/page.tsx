@@ -135,7 +135,7 @@ function SearchPageContent() {
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
               {movies.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} widthClass="w-full" />
+                <MovieCard key={movie.id} movie={movie} />
               ))}
             </div>
           )}

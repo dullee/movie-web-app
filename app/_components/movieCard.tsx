@@ -27,7 +27,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
 
   return (
     <Card
-      className={`flex flex-col w-full gap-0.5 p-0 bg-[#F4F4F5] dark:bg-zinc-900 text-black dark:text-white rounded-lg cursor-pointer overflow-hidden transition-transform hover:scale-[1.02] duration-300 border-none`}
+      className={`flex flex-col  md:w-57.5 w-[157.5px] h-77.25 md:h-109.75 gap-0.5 p-0 bg-[#F4F4F5] dark:bg-zinc-900 text-black dark:text-white rounded-lg cursor-pointer overflow-hidden transition-transform hover:scale-[1.02] duration-300 border-none`}
     >
       <Link href={`/movie/${movie.id}`} className="block w-full">
         <div className="relative w-full aspect-2/3 bg-zinc-200 dark:bg-zinc-800">

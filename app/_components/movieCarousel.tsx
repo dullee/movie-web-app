@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { PlayIcon } from "lucide-react";
 import Image from "next/image";
 import MovieTrailerPlayer from "./movieTrailerPlayer";
+import Link from "next/link";
 
 import {
   Carousel,
@@ -32,20 +33,25 @@ export default function MovieCarousel({ movies }: { movies: any[] }) {
                 {index > 0 && (
                   <CarouselPrevious className="hidden md:inline-flex xl:left-10 left-5 xl:p-5 bg-white text-black border-none hover:bg-black/80 hover:text-white transition" />
                 )}
+  
+                <Link href={`/movie/${movie.id}`}>
+                  <Image
+                    alt={movie.title}
+                    width={1440}
+                    height={600}
+                    loading="eager"
+                    className="xl:h-150 xl:object-cover object-scale-down"
+                    src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
+                  />
+                </Link>
 
-                <Image
-                  alt={movie.title}
-                  width={1440}
-                  height={600}
-                  loading="eager"
-                  className="xl:h-150 xl:object-cover object-scale-down"
-                  src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
-                />
                 <div className="md:absolute flex flex-col md:top-1/3 left-1/8 xl:max-w-1/4 p-5 md:max-w-1/2 text-black dark:text-white md:text-white">
                   <div className="flex flex-row justify-between">
                     <div>
                       <p className="">Now Playing:</p>
-                      <p className="md:text-4xl text-2xl font-extrabold">{movie.title}</p>
+                      <p className="md:text-4xl text-2xl font-extrabold">
+                        {movie.title}
+                      </p>
                     </div>
 
                     <div className="flex flex-row items-center  gap-1">

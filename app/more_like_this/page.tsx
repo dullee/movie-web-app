@@ -5,13 +5,13 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import PageLayoutTemplate from "../_components/pageLayoutTemplate";
 
-// 1. Inner component handles fetching & searchParams
-function PopularContent() {
+function MoreLikeThisContent() {
   const [movies, setMovies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
 
   const searchParam = useSearchParams();
+  const movieId = Number(searchParam.get("id"))
   const currentPage = Number(searchParam.get("page")) || 1;
 
   const API_READ_ACCESS_TOKEN =
@@ -22,7 +22,7 @@ function PopularContent() {
       setLoading(true);
       try {
         const res = await axios.get(
-          `https://api.themoviedb.org/3/movie/popular?language=en-US&page=${currentPage}`,
+          `https://api.themoviedb.org/3/movie/${movieId}/similar?language=en-US&page=${currentPage}`,
           {
             headers: { Authorization: `Bearer ${API_READ_ACCESS_TOKEN}` },
           }
@@ -32,7 +32,7 @@ function PopularContent() {
           res.data.total_pages > 500 ? 500 : res.data.total_pages;
         setTotalPages(cappedPages || 1);
       } catch (error) {
-        console.error("Failed fetching popular movies:", error);
+        console.error("Failed fetching More like this movies:", error);
       } finally {
         setLoading(false);
       }
@@ -43,7 +43,7 @@ function PopularContent() {
 
   return (
     <PageLayoutTemplate
-      pageTitle="Popular"
+      pageTitle="More Like This"
       moviesArr={movies}
       loading={loading}
       currentPage={currentPage}
@@ -52,11 +52,10 @@ function PopularContent() {
   );
 }
 
-// 2. Main Page wrapper provides the Suspense boundary
-export default function PopularPage() {
+export default function MoreLikeThis() {
   return (
     <Suspense fallback={null}>
-      <PopularContent />
+      <MoreLikeThisContent />
     </Suspense>
   );
 }
