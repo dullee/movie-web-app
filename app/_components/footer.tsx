@@ -11,19 +11,21 @@ export default function Footer() {
         <p>© 2024 Movie Z. All Rights Reserved.</p>
       </div>
       <div className="flex flex-row justify-between xl:gap-24">
-        <div className="flex flex-col pr-5">
-          <p>Contact information</p>
-          <div className="flex gap-6 flex-col pt-3">
+        <div className="flex flex-col pr-5 gap-6">
+          <div className="flex gap-3 flex-col">
+            <p>Contact information</p>
             <div className="flex flex-row items-center gap-3">
-              <Mail size={16}/>
+              <Mail size={16} />
               <div>
                 <p className="font-medium">Email:</p>
                 <p>support@movieZ.com</p>
               </div>
             </div>
+          </div>
+          <div className="flex flex-row items-center gap-3">
             <div className="flex flex-row items-center gap-3">
-              <div className="flex flex-row items-center gap-3">
-                <Phone size={16}/>
+              <Phone size={16} />
+              <div>
                 <p className="font-medium">Phone:</p>
                 <p>+976 (11) 123-4567</p>
               </div>
@@ -38,7 +40,7 @@ export default function Footer() {
             <p className="font-medium">Twitter</p>
             <p className="font-medium">Youtube</p>
           </div>
-        </div>
+        </div>{" "}
       </div>
     </div>
   );
