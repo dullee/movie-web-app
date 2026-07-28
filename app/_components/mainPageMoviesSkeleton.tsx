@@ -9,7 +9,7 @@ export default function MainPageMoviesSkeleton() {
         <Skeleton className="bg-[#F4F4F5] w-25 rounded-md text-[#F4F4F5]" />
       </div>
 
-      <div className="grid grid-cols-1  md:grid-cols-5 gap-5">
+      <div className="grid grid-cols-2  md:grid-cols-5 gap-5">
         {Array.from({ length: 10 }).map((_, index) => (
           <MovieCardSkeleton key={index} />
         ))}

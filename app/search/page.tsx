@@ -110,7 +110,7 @@ function SearchPageContent() {
 
       {hasGenresSelected ? (
         <h2 className="text-zinc-500 text-sm mt-1 mb-6">
-          {totalResults} titles in selected genre
+          {totalResults} titles in "{urlGenreNames}"
           {selectedGenreIds.length > 1 ? "s" : ""}
         </h2>
       ) : (

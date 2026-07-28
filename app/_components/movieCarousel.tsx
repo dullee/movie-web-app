@@ -43,7 +43,7 @@ export default function MovieCarousel({ movies }: { movies: any[] }) {
                     width={1440}
                     height={600}
                     loading="eager"
-                    className="xl:h-150 xl:object-cover object-scale-down"
+                    className="md:h-150 h-61.5 md:object-cover object-cover"
                     src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
                   />
                 </Link>
