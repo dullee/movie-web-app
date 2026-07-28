@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, Inter_Tight } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-
+// 1. Import your ThemeProvider component
+import { ThemeProvider } from "./_components/theme-providor";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -13,28 +14,28 @@ export const metadata: Metadata = {
   description: "Movie data base",
 };
 
+// app/layout.tsx
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  //   const themeScript = `(function() {
-  //   const savedTheme = localStorage.getItem('theme');
-  //   const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  //   if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
-  //     document.documentElement.classList.add('dark');
-  //   }
-  // })();`;
   return (
     <html
       lang="en"
-      // suppressHydrationWarning
+      suppressHydrationWarning
       className={`${inter.variable} h-full antialiased`}
     >
-      {/* <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head> */}
-      <body className="min-h-full bg-background flex flex-col">{children}</body>
+      <body className="min-h-full bg-background text-foreground flex flex-col">
+        <ThemeProvider
+          attribute="data-theme"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
