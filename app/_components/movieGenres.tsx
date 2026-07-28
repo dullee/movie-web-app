@@ -1,6 +1,9 @@
+"use client"; // Required because we are using useSearchParams and hooks
+
 import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, X } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import axios from "axios";
 
 const AVAILABLE_GENRES = [
@@ -36,6 +39,13 @@ export default function MovieGenres({
 
   const [genreIds, setGenreIds] = useState<any[]>([]);
 
+  // 1. Grab the URL parameters directly in this component!
+  const searchParams = useSearchParams();
+  const urlGenreIds = searchParams.get("genreId") || "";
+  const activeGenreIds = urlGenreIds
+    ? urlGenreIds.split(/[,|]/).map(Number)
+    : [];
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -47,7 +57,6 @@ export default function MovieGenres({
         setGenreIds(genreIdRes.data.genres);
       } catch (error) {
         console.error("Failed fetching upcoming view:", error);
-      } finally {
       }
     };
     fetchMovies();
@@ -61,17 +70,34 @@ export default function MovieGenres({
     toggleGenre(genre);
   };
 
-  return AVAILABLE_GENRES.map((genre) => (
-    <Button
-      key={genre}
-      variant="outline"
-      className=" rounded-full w-fit pr-px px-0.5 text-xs h-4"
-      onClick={() => sendGenre(genre)}
-    >
-      <p className="flex pl-2.5 font-semibold">
-        {genre === "Science Fiction" ? "Sci-Fi" : genre}
-      </p>
-      <ChevronRight strokeWidth={1.5}/>
-    </Button>
-  ));
+  return (
+    <>
+      {AVAILABLE_GENRES.map((genreName) => {
+        const matchedGenre = genreIds.find(
+          (g) => g.name.toLowerCase() === genreName.toLowerCase(),
+        );
+
+        // 2. Check if the ID exists in our parsed URL parameters
+        const isActive = matchedGenre
+          ? activeGenreIds.includes(matchedGenre.id)
+          : false;
+
+        return (
+          <Button
+            key={genreName}
+            // 3. Just use variant. Removed the buggy bg-foreground class addition.
+            variant={isActive ? "default" : "outline"}
+            className="rounded-full w-fit pr-px px-0.5 text-xs h-5"
+            onClick={() => sendGenre(genreName)}
+          >
+            <p className="flex pl-2.5 font-semibold">
+              {genreName === "Science Fiction" ? "Sci-Fi" : genreName}
+            </p>
+
+            {isActive ? <X /> : <ChevronRight strokeWidth={1.5} />}
+          </Button>
+        );
+      })}
+    </>
+  );
 }

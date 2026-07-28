@@ -40,7 +40,7 @@ export default function PageLayoutTemplate({
           <div className="mb-8">
             <h1 className="text-3xl font-bold tracking-tight mb-8">{pageTitle}</h1>
             <div className="grid md:grid-cols-5 grid-cols-2 gap-5 md:gap-8">
-              {moviesArr.map((movie) => (
+              {moviesArr.slice(0, 10).map((movie) => (
                 <MovieCard key={movie.id} movie={movie} />
               ))}
             </div>

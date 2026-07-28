@@ -15,11 +15,10 @@ function SearchPageContent() {
   const router = useRouter();
 
   const searchInput = searchParams.get("query") || "";
-  // Get genreId parameter (e.g. "28|12" or "28,12")
   const urlGenreIds = searchParams.get("genreId") || "";
+  const urlGenreNames = searchParams.get("genreName") || ""; // Optional tracker if genre names are passed
   const currentPage = Number(searchParams.get("page") || 1);
 
-  // Parse active genre IDs into an array of numbers
   const selectedGenreIds = urlGenreIds
     ? urlGenreIds.split(/[,|]/).map(Number)
     : [];
@@ -27,6 +26,7 @@ function SearchPageContent() {
   const [movies, setMovies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
 
   const API_READ_ACCESS_TOKEN: string =
     "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OWE3OGQ2OTcwZWQwMjVhM2M4OTJhYWMzMmU5MDIyMyIsIm5iZiI6MTc4MjM1NjE0OC45OTMsInN1YiI6IjZhM2M5OGI0ZmIwMGJlY2M0NDNlNWJkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MIxDzsEjJDNt6C-EpUX1pBSMbTbxjFyggM_M_q4pC04";
@@ -38,27 +38,21 @@ function SearchPageContent() {
       try {
         let movieApiUrl = "";
 
-        // 1. Search Query taking precedence
         if (searchInput) {
           movieApiUrl = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
             searchInput,
           )}&language=en-US&page=${currentPage}`;
-        }
-        // 2. Discover endpoint with multiple stacked genre IDs
-        else if (urlGenreIds) {
+        } else if (urlGenreIds) {
           movieApiUrl = `https://api.themoviedb.org/3/discover/movie?language=en-US&with_genres=${encodeURIComponent(
             urlGenreIds,
           )}&page=${currentPage}`;
-        }
-        // 3. Fallback
-        else {
+        } else {
           movieApiUrl = `https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=${currentPage}`;
         }
 
         const moviesRes = await axios.get(movieApiUrl, { headers });
         let results = moviesRes.data.results || [];
 
-        // If user searched AND selected genres, filter results locally
         if (searchInput && selectedGenreIds.length > 0) {
           results = results.filter((movie: any) =>
             selectedGenreIds.some((id) => movie.genre_ids?.includes(id)),
@@ -66,6 +60,7 @@ function SearchPageContent() {
         }
 
         setMovies(results);
+        setTotalResults(moviesRes.data.total_results || results.length);
         const cappedPages =
           moviesRes.data.total_pages > 500 ? 500 : moviesRes.data.total_pages;
         setTotalPages(cappedPages || 1);
@@ -105,22 +100,56 @@ function SearchPageContent() {
     router.push(`/search?${params.toString()}`);
   };
 
-  return (
-    <main className="flex-1 w-full pt-32 px-20">
-      <h1 className="text-2xl font-bold">Search Results</h1>
-      <h2 className="text-zinc-500 text-sm mt-1">
-        {movies?.length || 0} results for "
-        {searchInput ||
-          (selectedGenreIds.length
-            ? `${selectedGenreIds.length} genres selected`
-            : "All Discoveries")}
-        "
-      </h2>
+  const hasGenresSelected = selectedGenreIds.length > 0;
 
-      <div className="flex flex-row gap-8 mt-6">
+  return (
+    <main className="flex-1 w-full pt-22.5 md:pt-32 px-5 md:px-20">
+      <h1 className="text-2xl font-bold">
+        {hasGenresSelected ? "Search filter" : "Search Results"}
+      </h1>
+
+      {hasGenresSelected ? (
+        <h2 className="text-zinc-500 text-sm mt-1 mb-6">
+          {totalResults} titles in selected genre
+          {selectedGenreIds.length > 1 ? "s" : ""}
+        </h2>
+      ) : (
+        <h2 className="text-zinc-500 text-sm mt-1 mb-6">
+          {totalResults} results for "{searchInput || "All Discoveries"}"
+        </h2>
+      )}
+
+      {hasGenresSelected && (
+        <div className="flex flex-col w-full mb-6 block md:hidden">
+          <h2 className="font-bold text-lg">Search by genre</h2>
+          <h3 className="text-zinc-400 text-xs mb-3">
+            See list of movies by genre
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            <MovieGenres toggleGenre={toggleGenre} />
+          </div>
+        </div>
+      )}
+
+      <div className="flex flex-col md:flex-row gap-8 mt-2">
+        <div className="hidden md:flex flex-col w-80 shrink-0">
+          <h2 className="font-bold text-lg">Search by genre</h2>
+          <h3 className="text-zinc-400 text-xs mb-4">
+            See list of movies by genre
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            <MovieGenres toggleGenre={toggleGenre} />
+          </div>
+        </div>
+
+        <div
+          className="hidden md:block h-auto w-px bg-gray-200 dark:bg-zinc-800"
+          aria-hidden="true"
+        />
+
         <div className="flex-1">
           {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-5 md:gap-6">
               {Array.from({ length: 10 }).map((_, i) => (
                 <div
                   key={i}
@@ -132,36 +161,35 @@ function SearchPageContent() {
                 </div>
               ))}
             </div>
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+          ) : movies.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-12">
               {movies.map((movie) => (
                 <MovieCard key={movie.id} movie={movie} />
               ))}
             </div>
+          ) : (
+            <div className="w-full py-16 border rounded-lg flex items-center justify-center text-zinc-500 font-medium">
+              No results found
+            </div>
           )}
-        </div>
-
-        <div
-          className="h-auto w-px bg-gray-200 dark:bg-zinc-800"
-          aria-hidden="true"
-        />
-
-        <div className="flex flex-col w-80 shrink-0">
-          <h2 className="font-bold text-lg">Search by genre</h2>
-          <h3 className="text-zinc-400 text-xs mb-4">
-            See list of movies by genre
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            <MovieGenres
-              toggleGenre={toggleGenre}
-            />
-          </div>
         </div>
       </div>
 
       <div className="flex justify-center items-center gap-4 mt-12 pb-6">
         <MoviePagination currentPage={currentPage} totalPages={totalPages} />
       </div>
+
+      {!hasGenresSelected && (
+        <div className="flex flex-col w-full mt-8 pt-8 border-t block md:hidden">
+          <h2 className="font-bold text-lg">Search by genre</h2>
+          <h3 className="text-zinc-400 text-xs mb-3">
+            See list of movies by genre
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            <MovieGenres toggleGenre={toggleGenre} />
+          </div>
+        </div>
+      )}
     </main>
   );
 }

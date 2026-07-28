@@ -56,23 +56,22 @@ export default function Page() {
           (video: any) => video.site === "YouTube" && video.type === "Trailer",
         );
 
-        setTrailerKey(officialTrailer.key);
+        setTrailerKey(officialTrailer?.key);
 
         const video = await axios.get(
-          `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${officialTrailer.key}&key=AIzaSyBbpMOdNww_g1_7ETv3-kmaoatefyJ5JxU`,
+          `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${officialTrailer?.key}&key=AIzaSyBbpMOdNww_g1_7ETv3-kmaoatefyJ5JxU`,
         );
 
-        const videoDurationIso = video.data.items[0].contentDetails.duration;
+        const videoDurationIso = video.data.items[0]?.contentDetails.duration;
 
         setTrailerDuration(
-          videoDurationIso.replace(
+          videoDurationIso?.replace(
             /PT(\d+)M(\d+)S/,
             (match: string, m: string, s: string): string =>
               `${m}:${s.padStart(2, "0")}`,
           ),
         );
 
-        console.log("video", video);
       } catch (error) {
         console.error("failed to fetch movie data", error);
       } finally {

@@ -46,9 +46,9 @@ export default function SimilarMovies({ movieId }: MovieDetailsProps) {
           </button>
         </Link>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 w-full">
-        {similarMovies?.slice(0, 5).map((movie) => (
-          <div key={movie.id} className="md:w-57.5 w-[157.5px]">
+      <div className="grid grid-cols-2 sm:grid-cols-3 grid-rows-1 md:grid-cols-5 gap-4 w-full">
+        {similarMovies?.slice(0, 5).map((movie, index) => (
+          <div key={movie.id} className={index >= 2 ? "hidden md:block": "block"}>
             <MovieCard movie={movie} />
           </div>
         ))}

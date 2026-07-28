@@ -63,105 +63,105 @@ export default function SearchBar({}) {
   }, [searchInput]);
 
   return (
-    <div className="relative xl:w-94.75 ">
-      <InputGroup className="max-w-xs">
+    <div className="relative md:w-94.75">
+      <InputGroup className="max-w-xs border-none md:border">
         <div className="pr-2">
-          <InputGroupInput
-            onKeyDown={handleKeyDown}
-            placeholder=""
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            className="w-0 p-0 md:hidden"
-          />
-
           <InputGroupInput
             onKeyDown={handleKeyDown}
             placeholder="Search..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="hidden md:inline-flex md:w-64"
+            className="w-full border-none h-9 md:w-64"
           />
         </div>
 
         <InputGroupAddon>
-          {searchInput && (
-            <div className="absolute top-11 translate-x-1/5 bg-background text-foreground  dark:bg-black w-144.25 border p-3 z-20 min-w-50 rounded-lg">
-              {loadingSearchResults ? (
-                <div>Loading...</div>
-              ) : searchOuput?.length === 0 ? (
-                <div>No Results</div>
-              ) : (
-                <>
-                  {searchOuput?.slice(0, 5).map((movie) => (
-                    <div key={movie.id} className="flex flex-col ">
-                      <div className="flex flex-row">
-                        <Link
-                          href={`/movie/${movie.id}`}
-                          className="w-[67px] h-[100px] shrink-0 rounded-md m-2 p-0 overflow-hidden border"
-                        >
-                          <Image
-                            height={200}
-                            width={100}
-                            alt={movie.title}
-                            src={`${IMAGE_SERVICE_URL}/w500${movie.poster_path}`}
-                            className="object-cover"
-                          />
-                        </Link>
-                        <div className="flex flex-col justify-between w-full px-2 py-2">
-                          <div className="flex flex-col">
-                            <Link href={`/movie/${movie.id}`}>
-                              <p className="hover:underline text-foreground font-semibold text-[20px]">
-                                {movie.title}
-                              </p>
-                            </Link>
-                            <div className="flex flex-row gap-1">
-                              <Image
-                                width={16}
-                                height={18}
-                                alt="star"
-                                src={"/Star.svg"}
-                              />
-                              <div className="flex flex-row items-baseline">
-                                <p className="font-medium text-[14px] text-foreground">
-                                  {Math.round(movie.vote_average * 10) / 10}
-                                </p>
-                                <p className="font-normal text-xs text-[#71717A]">
-                                  /10
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex flex-row justify-between">
-                            <p>{movie.release_date?.slice(0, 4)}</p>
-                            <Link
-                              href={`/movie/${movie.id}`}
-                              className="hover:underline  flex flex-row items-center"
-                            >
-                              <p className="p-2">See More </p>
-                              <ArrowRightIcon size={16} />
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-
-                      <hr className="pt-2"></hr>
-                    </div>
-                  ))}
-
-                  <Link
-                    href={`/search?query=${encodeURIComponent(searchInput)}`}
-                  >
-                    <p className="hover:underline py-[10px]">
-                      See all results for "{searchInput}"
-                    </p>
-                  </Link>
-                </>
-              )}
-            </div>
-          )}
           <Search />
         </InputGroupAddon>
       </InputGroup>
+
+      {searchInput && (
+        /* Added max-h-[450px] and changed overflow-y-scroll to overflow-y-auto */
+        <div className="absolute top-12 left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 bg-background dark:bg-black w-[calc(100vw-32px)] md:w-144.25 border p-3 z-20 rounded-lg shadow-lg max-h-[450px] overflow-y-auto">
+          {loadingSearchResults ? (
+            <div className="p-2">Loading...</div>
+          ) : searchOuput?.length === 0 ? (
+            <div className="p-2">No Results</div>
+          ) : (
+            <>
+              {searchOuput?.slice(0,5).map((movie) => (
+                <div key={movie.id} className="flex flex-col">
+                  <div className="flex flex-row">
+                    <Link
+                      href={`/movie/${movie.id}`}
+                      className="w-[67px] h-[100px] shrink-0 rounded-md m-2 p-0 overflow-hidden border"
+                    >
+                      <Image
+                        height={200}
+                        width={100}
+                        alt={movie.title}
+                        src={
+                          movie.poster_path
+                            ? `${IMAGE_SERVICE_URL}/w500${movie.poster_path}`
+                            : "/placeholder.png"
+                        }
+                        className="object-cover"
+                      />
+                    </Link>
+                    <div className="flex flex-col justify-between w-full px-2 py-2">
+                      <div className="flex flex-col">
+                        <Link href={`/movie/${movie.id}`}>
+                          <p className="hover:underline text-foreground font-semibold text-[20px]">
+                            {movie.title}
+                          </p>
+                        </Link>
+                        <div className="flex flex-row gap-1">
+                          <Image
+                            width={16}
+                            height={18}
+                            alt="star"
+                            src={"/Star.svg"}
+                          />
+                          <div className="flex flex-row items-baseline">
+                            <p className="font-medium text-[14px] text-foreground">
+                              {movie.vote_average ? Math.round(movie.vote_average * 10) / 10 : "0.0"}
+                            </p>
+                            <p className="font-normal text-xs text-[#71717A]">
+                              /10
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-row justify-between">
+                        <p className="text-foreground">
+                          {movie.release_date?.slice(0, 4)}
+                        </p>
+                        <Link
+                          href={`/movie/${movie.id}`}
+                          className="hover:underline flex flex-row items-center"
+                        >
+                          <p className="p-2">See More </p>
+                          <ArrowRightIcon size={16} />
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                  <hr className="pt-2" />
+                </div>
+              ))}
+
+              <Link
+                href={`/search?query=${encodeURIComponent(searchInput)}`}
+                className="block text-center sticky bottom-0 bg-background dark:bg-black py-2 border-t mt-2"
+              >
+                <p className="hover:underline text-foreground font-medium">
+                  See all results for "{searchInput}"
+                </p>
+              </Link>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
