@@ -46,7 +46,7 @@ export default function MovieTrailerPlayer({
         <div className="relative w-full md:max-w-4xl aspect-video md:overflow-hidden rounded-xl  shadow-2xl">
           <button
             onClick={onClose}
-            className="absolute -top-10 left-0 md:top-4 md:right-4 bg-black/60 p-2 rounded-full hover:bg-black/80 transition text-white z-50"
+            className="absolute -top-10 right-0 md:top-4 md:right-4 bg-black/60 p-2 rounded-full hover:bg-black/80 transition text-white z-50"
           >
             <XIcon />
           </button>

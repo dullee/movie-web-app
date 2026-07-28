@@ -71,7 +71,6 @@ export default function Page() {
               `${m}:${s.padStart(2, "0")}`,
           ),
         );
-
       } catch (error) {
         console.error("failed to fetch movie data", error);
       } finally {
@@ -229,7 +228,7 @@ export default function Page() {
           </div>
 
           <div className="space-y-3 px-5 md:px-0 pt-6">
-            <div className="flex items-center border-b gap-2">
+            <div className="flex items-center border-b pb-2 gap-2">
               <h2 className="w-20 font-bold  shrink-0">Director</h2>
               <div className="flex flex-wrap gap-2 ">
                 {directors.map((director) => (
@@ -238,7 +237,7 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="flex items-center border-b gap-2">
+            <div className="flex items-center border-b pb-2  gap-2">
               <h2 className="w-20 font-bold  shrink-0">Writers</h2>
               <div className="flex flex-wrap gap-1 ">
                 {writers.slice(0, 3).map((writer, index) => (
@@ -252,7 +251,7 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="flex items-center border-b gap-2">
+            <div className="flex items-center border-b pb-2  gap-2">
               <h2 className="w-20 font-bold  shrink-0">Stars</h2>
               <div className="flex flex-wrap gap-1 ">
                 {actors &&
