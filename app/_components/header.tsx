@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import MovieGenres from "./movieGenres";
-import {Film, Search, SunIcon, MoonIcon, ChevronDown, X } from "lucide-react";
+import { Film, Search, SunIcon, MoonIcon, ChevronDown, X } from "lucide-react";
 
 export default function Header() {
   const [showGenreList, setShowGenreList] = useState(false);
@@ -46,7 +46,7 @@ export default function Header() {
     <div className="fixed top-0 flex flex-row items-center justify-between w-full text-foreground bg-white dark:bg-black xl:px-20 px-4 py-4 z-10">
       <Link href="/" className="shrink-0">
         <div className="text-[#4338CA] font-bold italic font-inter text-lg flex items-center flex-row gap-2">
-          <Film size={20}/>
+          <Film size={20} />
           Movie Z
         </div>
       </Link>
@@ -62,7 +62,7 @@ export default function Header() {
         </Button>
 
         {showGenreList && (
-          <Card className="absolute top-25 left-0 p-5 z-20 w-100">
+          <Card className="absolute top-10 left-0 p-5 z-20 w-125">
             <h2 className="font-semibold text-2xl">Genre</h2>
             <h3 className="font-normal text-base text-muted-foreground mb-3">
               See lists of movies by genre

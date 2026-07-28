@@ -109,7 +109,7 @@ export default function Page() {
       )}
 
       <Header />
-      <div className="flex md:p-20 pt-22.5 md:pt-25 flex-col w-full max-w-6xl mx-auto justify-center items-center md:gap-8">
+      <div className="flex md:max-w-360 md:px-45 pt-22.5 md:pt-25 flex-col w-full max-w-6xl mx-auto justify-center items-center md:gap-8">
         <div className="flex justify-between w-full items-end md:px-0 px-5   pb-4">
           <div className="flex flex-col gap-1 dark:text-white">
             <h1 className="md:text-4xl text-2xl font-semibold md:font-extrabold tracking-tight">
@@ -147,13 +147,13 @@ export default function Page() {
         </div>
 
         <div className="flex md:flex-row flex-col-reverse gap-10 w-full items-start ">
-          <div className="flex flex-row px-5 gap-8.5">
+          <div className="flex flex-row px-5 gap-8.5 md:px-0">
             <Image
               width={290}
               height={428}
               loading="eager"
               src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-              className="md:rounded-xl object-cover shadow-lg md:border shrink-0 w-25 h-37 "
+              className="md:rounded-sm object-cover shadow-lg md:border shrink-0 w-25 h-37 md:h-107 md:w-72.5"
               alt={movie.title}
             />
             <div className="flex flex-col md:hidden gap-5">
@@ -171,14 +171,13 @@ export default function Page() {
 
               <div className="w-full leading-relaxed text-sm max-w-3xlmr-auto space-y-6">
                 <div>
-                  <h3 className="text-lg font-bold hidden mb-2">Overview</h3>
                   <p>{movie.overview}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="relative flex-1 group md:rounded-xl overflow-hidden md:border  h-107">
+          <div className="relative flex-1 group md:rounded-sm overflow-hidden md:border  h-107">
             <div className="absolute bottom-5 left-5 flex flex-row items-center gap-3">
               <Button
                 variant="outline"
@@ -203,8 +202,8 @@ export default function Page() {
             />
           </div>
         </div>
-        <div>
-          <div className="hidden md:flex">
+        <div className="flex flex-col justify-start w-full ">
+          <div className="hidden md:flex flex-col w-full gap-5">
             <div className="flex w-full flex-wrap gap-2 md:px-0 px-5 justify-start">
               {movie.genres?.map((genre: any) => (
                 <Badge
@@ -219,9 +218,6 @@ export default function Page() {
 
             <div className="w-full leading-relaxed text-sm max-w-3xl md:px-0 px-5 mr-auto space-y-6">
               <div>
-                <h3 className="text-lg font-bold md:inline-flex hidden mb-2">
-                  Overview
-                </h3>
                 <p>{movie.overview}</p>
               </div>
             </div>
@@ -231,8 +227,8 @@ export default function Page() {
             <div className="flex items-center border-b pb-2 gap-2">
               <h2 className="w-20 font-bold  shrink-0">Director</h2>
               <div className="flex flex-wrap gap-2 ">
-                {directors.map((director) => (
-                  <span key={director.id}>{director.name}</span>
+                {directors.map((director, index) => (
+                  <span key={index}>{director.name}</span>
                 ))}
               </div>
             </div>
@@ -241,7 +237,7 @@ export default function Page() {
               <h2 className="w-20 font-bold  shrink-0">Writers</h2>
               <div className="flex flex-wrap gap-1 ">
                 {writers.slice(0, 3).map((writer, index) => (
-                  <span key={writer.credit_id}>
+                  <span key={index}>
                     {writer.name}
                     {index < Math.min(writers.slice(0, 3).length, 3) - 1
                       ? " · "
@@ -256,7 +252,7 @@ export default function Page() {
               <div className="flex flex-wrap gap-1 ">
                 {actors &&
                   actors.slice(0, 3).map((actor, index) => (
-                    <span key={actor.id}>
+                    <span key={index}>
                       {actor.name}
                       {index < 2 ? " · " : ""}
                     </span>

@@ -10,8 +10,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Movie db",
-  description: "Movie data base",
+  title: "MovieZ",
+  description: "Movie database",
 };
 
 // app/layout.tsx

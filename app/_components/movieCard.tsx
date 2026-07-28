@@ -59,7 +59,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
           </div>
 
           <CardTitle
-            className="md:text-[18px] text-[14px] font-normal md:h-[56px] "
+            className="md:text-[18px] text-[14px] font-normal md:h-14 "
             title={movie.title}
           >
             {movie.title}

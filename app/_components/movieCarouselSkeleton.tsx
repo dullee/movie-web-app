@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function MovieCarouselSkeleton() {
   return (
-    <div className="w-full relative flex h-[600px] md:pt-25 pt-3   dark:bg-black">
+    <div className="w-full relative flex h-150 md:pt-25 pt-3   dark:bg-black">
       <div className="flex justify-center w-full">
         <div className="flex flex-col items-center max-w-360 w-full relative justify-center p-0 bg-background dark:bg-black">
           {/* Backdrop Image Skeleton */}
