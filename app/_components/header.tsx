@@ -43,7 +43,7 @@ export default function Header() {
   };
 
   return (
-    <div className="fixed top-0 flex flex-row items-center justify-between w-full text-foreground bg-white dark:bg-black xl:px-20 px-4 py-4 z-10">
+    <div className="fixed top-0 flex flex-row items-center justify-between w-full text-foreground bg-white dark:bg-black max-w-360 md:px-20 px-4 py-4 z-10">
       <Link href="/" className="shrink-0">
         <div className="text-[#4338CA] font-bold italic font-inter text-lg flex items-center flex-row gap-2">
           <Film size={20} />
