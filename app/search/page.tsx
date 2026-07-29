@@ -172,7 +172,7 @@ function SearchPageContent() {
   };
 
   return (
-    <main className="flex-1 max-w-360 w-full pt-22.5 md:pt-32 px-5 md:px-20">
+    <main className="flex-1 max-w-360 w-full mx-auto pt-22.5 md:pt-32 px-5 md:px-20">
       <h1 className="text-2xl font-bold">
         {hasGenresSelected || searchInput ? "Search Filter" : "Search Results"}
       </h1>
@@ -181,22 +181,17 @@ function SearchPageContent() {
         {getHeaderTitle()}
       </h2>
 
-      <div className="flex flex-col w-full mb-6 md:hidden">
-        <h2 className="font-bold text-lg">Filter by genre</h2>
-        <h3 className="text-zinc-400 text-xs mb-3">
-          Refine your search by genre
-        </h3>
-        <div className="flex flex-wrap gap-2">
-          <MovieGenres toggleGenre={toggleGenre} />
-        </div>
-      </div>
+      {/* A parent flex column wrapper to control the order of the blocks */}
+      <div className="flex flex-col w-full">
 
-      <div
-        className={`flex flex-col md:flex-row ${!hasGenresSelected && "md:flex-row-reverse"} gap-8 mt-2 `}
-      >
-        <div className="hidden md:flex flex-col w-80 shrink-0">
-          <h2 className="font-bold text-lg">Search by genre</h2>
-          <h3 className="text-zinc-400 text-xs mb-4">
+        {/* BLOCK 1: Mobile Genres (Order changes based on searchInput) */}
+        <div
+          className={`flex flex-col w-full md:hidden ${
+            searchInput ? "order-2 mt-8" : "order-1 mb-6"
+          }`}
+        >
+          <h2 className="font-bold text-lg">Filter by genre</h2>
+          <h3 className="text-zinc-400 text-xs mb-3">
             Refine your search by genre
           </h3>
           <div className="flex flex-wrap gap-2">
@@ -204,42 +199,60 @@ function SearchPageContent() {
           </div>
         </div>
 
+        {/* BLOCK 2: Desktop Sidebar & Main Movie Results Grid */}
         <div
-          className="hidden md:block h-auto w-px bg-gray-200 dark:bg-zinc-800"
-          aria-hidden="true"
-        />
+          className={`flex flex-col md:flex-row ${
+            !hasGenresSelected && "md:flex-row-reverse"
+          } gap-8 mt-2 ${searchInput ? "order-1" : "order-2"}`}
+        >
+          {/* Desktop Sub-Sidebar */}
+          <div className="hidden md:flex flex-col w-80 shrink-0">
+            <h2 className="font-bold text-lg">Search by genre</h2>
+            <h3 className="text-zinc-400 text-xs mb-4">
+              Refine your search by genre
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              <MovieGenres toggleGenre={toggleGenre} />
+            </div>
+          </div>
 
-        <div className="flex-1">
-          {/* Desktop Subheader */}
-          <h1 className="font-semibold text-xl mt-1 mb-6 hidden md:flex">
-            {getHeaderTitle()}
-          </h1>
+          <div
+            className="hidden md:block h-auto w-px bg-gray-200 dark:bg-zinc-800"
+            aria-hidden="true"
+          />
 
-          {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-x-12 max-w-201.5 md:gap-y-8">
-              {Array.from({ length: 12 }).map((_, i) => (
-                <Skeleton
-                  key={i}
-                  className="flex md:w-41.25 w-[157.5px] h-77.25 md:h-82.75 bg-muted rounded-xl cursor-pointer"
-                />
-              ))}
-            </div>
-          ) : movies.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 max-w-201.5 md:gap-x-12 md:gap-y-8">
-              {movies.map((movie) => (
-                <div
-                  key={movie.id}
-                  className="flex max-h-82.75 overflow-hidden rounded-md"
-                >
-                  <MovieCard movie={movie} />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="w-full py-16 border rounded-lg flex items-center justify-center text-zinc-500 font-medium">
-              No results found
-            </div>
-          )}
+          {/* Results wrapper utilizing flex-1 so the grid layout works properly */}
+          <div className="flex-1 w-full">
+            <h1 className="font-semibold text-xl mt-1 mb-6 hidden md:flex">
+              {getHeaderTitle()}
+            </h1>
+
+            {loading ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-x-12 max-w-201.5 md:gap-y-8">
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <Skeleton
+                    key={i}
+                    className="flex md:w-41.25 w-[157.5px] h-77.25 md:h-82.75 bg-muted rounded-xl cursor-pointer"
+                  />
+                ))}
+              </div>
+            ) : movies.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-5 max-w-201.5 md:gap-x-12 md:gap-y-8">
+                {movies.map((movie) => (
+                  <div
+                    key={movie.id}
+                    className="flex max-h-82.75 overflow-hidden rounded-md"
+                  >
+                    <MovieCard movie={movie} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="w-full py-16 border rounded-lg flex items-center justify-center text-zinc-500 font-medium">
+                No results found
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -252,7 +265,7 @@ function SearchPageContent() {
 
 export default function Page() {
   return (
-    <div className="flex flex-col min-h-screen bg-white text-black dark:text-white dark:bg-black justify-center items-center">
+    <div className="flex flex-col min-h-screen bg-white text-black dark:text-white dark:bg-black">
       <Header />
       <Suspense
         fallback={
