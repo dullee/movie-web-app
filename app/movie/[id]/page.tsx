@@ -189,7 +189,7 @@ export default function Page() {
                 <PlayIcon className="fill-black" />
               </Button>
               <p className="text-white">Play Trailer</p>
-              <p>{trailerDuration}</p>
+              <p className="text-white">{trailerDuration}</p>
             </div>
 
             <Image
@@ -197,7 +197,7 @@ export default function Page() {
               height={428}
               loading="eager"
               src={`https://image.tmdb.org/t/p/w1280/${movie.backdrop_path}`}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 cursor-pointer"
+              className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105 cursor-pointer"
               alt={movie.title}
             />
           </div>
