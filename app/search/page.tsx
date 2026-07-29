@@ -168,7 +168,7 @@ function SearchPageContent() {
     if (hasGenresSelected) {
       return `${displayTotalResults} titles in "${genreNames || "Selected Genres"}"`;
     }
-    return `${displayTotalResults} results for "${searchInput || "All Discoveries"}"`;
+    return `${displayTotalResults} titles in "${searchInput || "All Discoveries"}"`;
   };
 
   return (
@@ -177,12 +177,10 @@ function SearchPageContent() {
         {hasGenresSelected || searchInput ? "Search Filter" : "Search Results"}
       </h1>
 
-      {/* Mobile Subheader */}
       <h2 className="text-zinc-500 text-sm mt-1 mb-6 md:hidden">
         {getHeaderTitle()}
       </h2>
 
-      {/* Mobile Genre Filters (Shown whenever genre section is needed) */}
       <div className="flex flex-col w-full mb-6 md:hidden">
         <h2 className="font-bold text-lg">Filter by genre</h2>
         <h3 className="text-zinc-400 text-xs mb-3">
@@ -193,10 +191,9 @@ function SearchPageContent() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8 mt-2">
-        {/* Desktop Sidebar Genre Filters */}
+      <div className={`flex flex-col md:flex-row ${!hasGenresSelected && "md:flex-row-reverse"} gap-8 mt-2 `}>
         <div className="hidden md:flex flex-col w-80 shrink-0">
-          <h2 className="font-bold text-lg">Filter by genre</h2>
+          <h2 className="font-bold text-lg">Search by genre</h2>
           <h3 className="text-zinc-400 text-xs mb-4">
             Refine your search by genre
           </h3>
