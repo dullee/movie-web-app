@@ -8,7 +8,7 @@ export default function MovieCarouselSkeleton() {
       <div className="flex justify-center w-full">
         <div className="flex flex-col items-center max-w-360 w-full relative justify-center p-0 bg-background dark:bg-black">
           {/* Backdrop Image Skeleton */}
-          <Skeleton className="w-full md:h-150 h-61.5 rounded-none" />
+          <Skeleton className="w-full md:h-150 h-full rounded-none" />
 
           {/* Info Content Skeleton */}
           <div className="w-full md:absolute flex flex-col md:top-1/3 left-1/8 xl:max-w-1/4 p-5 md:max-w-1/2">
