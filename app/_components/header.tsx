@@ -43,98 +43,100 @@ export default function Header() {
   };
 
   return (
-    <div className="fixed top-0 flex flex-row items-center justify-between w-full text-foreground bg-white dark:bg-black max-w-360 md:px-20 px-4 py-4 z-10">
-      <Link href="/" className="shrink-0">
-        <div className="text-[#4338CA] font-bold italic font-inter text-lg flex items-center flex-row gap-2">
-          <Film size={20} />
-          Movie Z
+    <div className="fixed top-0 flex justify-center items-center w-full text-foreground bg-white dark:bg-black md:px-20 px-4 py-4 z-10">
+      <div className=" flex flex-row justify-between w-full  max-w-360 ">
+        <Link href="/" className="shrink-0">
+          <div className="text-[#4338CA] font-bold italic font-inter text-lg flex items-center flex-row gap-2">
+            <Film size={20} />
+            Movie Z
+          </div>
+        </Link>
+
+        <div className="hidden md:flex flex-row items-center gap-3 relative">
+          <Button
+            onClick={() => setShowGenreList(!showGenreList)}
+            variant="outline"
+            className="px-4"
+          >
+            <ChevronDown className="mr-1 h-4 w-4" />
+            Genre
+          </Button>
+
+          {showGenreList && (
+            <Card className="absolute top-10 left-0 p-5 z-20 w-125">
+              <h2 className="font-semibold text-2xl">Genre</h2>
+              <h3 className="font-normal text-base text-muted-foreground mb-3">
+                See lists of movies by genre
+              </h3>
+              <hr className="mb-4" />
+              <div className="flex flex-wrap gap-4">
+                <MovieGenres toggleGenre={toggleGenre} />
+              </div>
+            </Card>
+          )}
+
+          <SearchBar />
         </div>
-      </Link>
 
-      <div className="hidden md:flex flex-row items-center gap-3 relative">
-        <Button
-          onClick={() => setShowGenreList(!showGenreList)}
-          variant="outline"
-          className="px-4"
-        >
-          <ChevronDown className="mr-1 h-4 w-4" />
-          Genre
-        </Button>
+        <div className="flex flex-row items-center gap-2">
+          <div className="block md:hidden max-w-45">
+            {showMobileMenu ? (
+              <div className="w-full h-17.5 fixed left-0 top-0 bg-background flex justify-center   items-center">
+                <Button
+                  variant={"outline"}
+                  className="w-9 h-9 mr-3"
+                  onClick={() => setShowGenreDrop(!showGenreDrop)}
+                >
+                  <ChevronDown />
+                </Button>
 
-        {showGenreList && (
-          <Card className="absolute top-10 left-0 p-5 z-20 w-125">
-            <h2 className="font-semibold text-2xl">Genre</h2>
-            <h3 className="font-normal text-base text-muted-foreground mb-3">
-              See lists of movies by genre
-            </h3>
-            <hr className="mb-4" />
-            <div className="flex flex-wrap gap-4">
-              <MovieGenres toggleGenre={toggleGenre} />
-            </div>
-          </Card>
-        )}
+                {showGenreDrop && (
+                  <Card className="absolute top-15 left-0 p-5 mx-5 z-20 flex">
+                    <h2 className="font-semibold text-2xl">Genre</h2>
+                    <h3 className="font-normal text-base text-muted-foreground">
+                      See lists of movies by genre
+                    </h3>
+                    <hr />
+                    <div className="flex flex-wrap gap-4">
+                      <MovieGenres toggleGenre={toggleGenre} />
+                    </div>
+                  </Card>
+                )}
 
-        <SearchBar />
-      </div>
-
-      <div className="flex flex-row items-center gap-2">
-        <div className="block md:hidden max-w-45">
-          {showMobileMenu ? (
-            <div className="w-full h-17.5 fixed left-0 top-0 bg-background flex justify-center   items-center">
+                <div className="w-62.75">
+                  <SearchBar />
+                </div>
+                <Button
+                  variant={"ghost"}
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  <X />
+                </Button>
+              </div>
+            ) : (
               <Button
                 variant={"outline"}
-                className="w-9 h-9 mr-3"
-                onClick={() => setShowGenreDrop(!showGenreDrop)}
+                onClick={() => setShowMobileMenu(true)}
+                className="w-9 h-9"
               >
-                <ChevronDown />
+                <Search />
               </Button>
+            )}
+          </div>
 
-              {showGenreDrop && (
-                <Card className="absolute top-15 left-0 p-5 mx-5 z-20 flex">
-                  <h2 className="font-semibold text-2xl">Genre</h2>
-                  <h3 className="font-normal text-base text-muted-foreground">
-                    See lists of movies by genre
-                  </h3>
-                  <hr />
-                  <div className="flex flex-wrap gap-4">
-                    <MovieGenres toggleGenre={toggleGenre} />
-                  </div>
-                </Card>
-              )}
-
-              <div className="w-62.75">
-                <SearchBar />
-              </div>
-              <Button
-                variant={"ghost"}
-                onClick={() => setShowMobileMenu(false)}
-              >
-                <X />
-              </Button>
-            </div>
-          ) : (
-            <Button
-              variant={"outline"}
-              onClick={() => setShowMobileMenu(true)}
-              className="w-9 h-9"
-            >
-              <Search />
-            </Button>
-          )}
+          <Button
+            variant="outline"
+            className="cursor-pointer border dark:text-white w-9 h-9  shrink-0"
+            onClick={toggleDarkMode}
+            aria-label="Toggle Theme"
+          >
+            {darkMode ? (
+              <SunIcon className="h-4 w-4" />
+            ) : (
+              <MoonIcon className="h-4 w-4" />
+            )}
+          </Button>
         </div>
-
-        <Button
-          variant="outline"
-          className="cursor-pointer border dark:text-white w-9 h-9  shrink-0"
-          onClick={toggleDarkMode}
-          aria-label="Toggle Theme"
-        >
-          {darkMode ? (
-            <SunIcon className="h-4 w-4" />
-          ) : (
-            <MoonIcon className="h-4 w-4" />
-          )}
-        </Button>
       </div>
     </div>
   );
