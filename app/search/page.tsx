@@ -191,7 +191,9 @@ function SearchPageContent() {
         </div>
       </div>
 
-      <div className={`flex flex-col md:flex-row ${!hasGenresSelected && "md:flex-row-reverse"} gap-8 mt-2 `}>
+      <div
+        className={`flex flex-col md:flex-row ${!hasGenresSelected && "md:flex-row-reverse"} gap-8 mt-2 `}
+      >
         <div className="hidden md:flex flex-col w-80 shrink-0">
           <h2 className="font-bold text-lg">Search by genre</h2>
           <h3 className="text-zinc-400 text-xs mb-4">
@@ -214,16 +216,16 @@ function SearchPageContent() {
           </h1>
 
           {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-5 md:gap-6">
-              {Array.from({ length: 10 }).map((_, i) => (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-x-12 max-w-201.5 md:gap-y-8">
+              {Array.from({ length: 12 }).map((_, i) => (
                 <Skeleton
                   key={i}
-                  className="flex flex-col md:w-57.5 w-[157.5px] h-77.25 md:h-109.75 bg-muted rounded-xl cursor-pointer"
+                  className="flex md:w-41.25 w-[157.5px] h-77.25 md:h-82.75 bg-muted rounded-xl cursor-pointer"
                 />
               ))}
             </div>
           ) : movies.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 max-w-201.5 md:gap-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 max-w-201.5 md:gap-x-12 md:gap-y-8">
               {movies.map((movie) => (
                 <div
                   key={movie.id}
